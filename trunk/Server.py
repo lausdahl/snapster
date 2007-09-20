@@ -285,17 +285,17 @@ class Server(Thread):
             
     def __HandleQueryHit(self, message):
         elements = message.split('&')
-        nodeInfo = elements[0]
+        nodeInfo = elements[0].split('|')
         fileList = elements[1]
-        
+        message = ''
         keyword = nodeInfo[1]
         for i in range(0,self.NODE_LENGTH):
-            message = message + str(self.nodeInfo[i+2]) + "|"
+            message = message + str(nodeInfo[i+2]) + "|"
         message = message[:-1]
         
         host = Node.Node()
         host.SetNodeFromMessage(message)
-        host.Show()
+        #host.Show()
         
         files = fileList.split('|')
         fileName = files[0]
