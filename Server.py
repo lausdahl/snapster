@@ -248,7 +248,8 @@ class Server(Thread):
             
     def __ForwardQuery(self, message, senderNode):
         for n in self.__FindKWalkers(senderNode):
-            self.__SendQuery(message,n)
+            if(n.id != senderNode.id):
+                self.__SendQuery(message,n)
             
     def __FindKWalkers(self, senderNode):
         kwCount = Settings().NumberOfKWalkers
