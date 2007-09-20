@@ -26,7 +26,7 @@ class DownloadList:
                     
     def Print(self):
         self.__ReadList()
-        print "\n|Id\t|Keyword\t|Filename\t|Peer"
+        print "\n|Id\tRelevance\t|Keyword\t|Filename\t|Peer"
         
         for downloadItem in self.downloadList:
             downloadItem.Print()
