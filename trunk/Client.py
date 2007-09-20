@@ -59,11 +59,11 @@ class Client(Thread):
         l = List.List()
         print l.ToString()
         
-    def __ShowDownloadList():
+    def __ShowDownloadList(self):
         dl = DownloadList()
         dl.Print()
         
-    def __ClearDownloadList():
+    def __ClearDownloadList(self):
         dl = DownloadList()
         dl.Clear()
         
