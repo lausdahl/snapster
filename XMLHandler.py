@@ -136,6 +136,7 @@ class XMLHandler:
         
         settings.append(str(self.dom.getElementsByTagName('NumberOfKWalkers')[0].childNodes[0].nodeValue))
         settings.append(str(self.dom.getElementsByTagName('fileSharePort')[0].childNodes[0].nodeValue))
+        settings.append(str(self.dom.getElementsByTagName('sharingFolder')[0].childNodes[0].nodeValue))
         
         #for conn in self.dom.getElementsByTagName('app/MaxNeighbourCount'): #run through all max_connections tags
         #    if(conn.hasChildNodes()):
