@@ -7,6 +7,7 @@ from SharedFolder import SharedFolder
 from Settings import Settings
 import select
 import sys
+import os
 from SharedItem import SharedItem
 class FileShareServer(Thread):
     currentNode = None
@@ -75,9 +76,10 @@ class FileShareServer(Thread):
         
     def __HandleDownloadFile(self,fileName):
         file = Settings().SharingFolderPath + "\\" + fileName
-        f = open(file, "rb")
-        data = f.read()
-        f.close()
+        if (os.path.exists(file)):
+            f = open(file, "rb")
+            data = f.read()
+            f.close()
+            self.client.send(data)
         
-        self.client.send(data)
         self.client.close()
