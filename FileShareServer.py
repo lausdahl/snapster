@@ -44,21 +44,26 @@ class FileShareServer(Thread):
             (rd, wr, ex) = select.select([self.s], [], [], 2.0)
             #print (rd, wr, ex)
             if (len(rd) > 0 and self.terminateServer == 0):
-                self.client, address = self.s.accept()
-                data = self.client.recv(size)
-                
-                self.elements = str(data).split('|')
-                if (len(self.elements) == 0):
-                    print "Unknown message: " + str(data)
-                else:
-                    message = str(self.elements[0])
-                    if (message == "Download"):
-                        self.__HandleDownloadFile(self.element[1])
+                try:
+                    print "ShareServer, Client connected"
+                    self.client, address = self.s.accept()
+                    data = self.client.recv(size)
+                    print "ShareServer, data: " + data
+                    
+                    self.elements = str(data).split('|')
+                    if (len(self.elements) == 0):
+                        print "Unknown message: " + str(data)
                     else:
-                        self.__HandleUnknownMessage(message)
-                self.client.close()
+                        message = str(self.elements[0])
+                        if (message == "Download"):
+                            self.__HandleDownloadFile(self.elements[1])
+                        else:
+                            self.__HandleUnknownMessage(message)
+                    self.client.close()
+                except socket.error:
+                    resetSocket = True
             else:
-                resetSocket = True
+                pass#print "ShareServer, no connection"
             
             if (resetSocket):
                 self.s.close()
@@ -67,9 +72,10 @@ class FileShareServer(Thread):
                 self.s.listen(backlog)
         self.s.close()
         print "Server stopped"
+        
     def __HandleDownloadFile(self,fileName):
-        #file=SharedFolder(Settings().SharingFolderPath).GetSharedFileInfo(item)
-        f = open(fileName, "rb")
+        file = Settings().SharingFolderPath + "\\" + fileName
+        f = open(file, "rb")
         data = f.read()
         f.close()
         
