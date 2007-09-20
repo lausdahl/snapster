@@ -299,7 +299,9 @@ class Server(Thread):
         #host.Show()
         
         files = fileList.split('|')
-        si = SharedItem().SetFromMessage(fileList)
+        si = SharedItem()
+        if (not si.SetFromMessage(fileList)):
+            return
         fileName = si.Name()
         fileSize = si.Size()
         fileRelevance = si.Relevance()
