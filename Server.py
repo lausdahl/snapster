@@ -211,7 +211,7 @@ class Server(Thread):
         #first vi search
         #path = sys.path[0] + "\\Files"
         s = Settings()
-        path = s.SharingFolder
+        path = s.SharingFolderPath
         sharedFolder = SharedFolder(path)
         if(sharedFolder.Contains(key)):
             print "\nFound query locally, sending query hit"
@@ -229,7 +229,7 @@ class Server(Thread):
             s.connect((reciever.ip, reciever.port))
             totalsent = 0
             s = Settings()
-            path = s.SharingFolder
+            path = s.SharingFolderPath
             sf = SharedFolder(path)
             si=sf.GetSharedFileInfo(key)
             message = "QueryHit|" + str(key) + "|" + str(Settings().GetAppNode().ToMessage())+"&"+str(si.Name)+"|"+str(si.Size)
