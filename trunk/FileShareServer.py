@@ -67,8 +67,8 @@ class FileShareServer(Thread):
                 self.s.listen(backlog)
         self.s.close()
         print "Server stopped"
-    def __HandleDownloadFile(self,item):
-        file=SharedFolder.GetSharedFileInfo(item)
+    def __HandleDownloadFile(self,fileName):
+        #file=SharedFolder(Settings().SharingFolderPath).GetSharedFileInfo(item)
         f = open(fileName, "rb")
         data = f.read()
         f.close()
