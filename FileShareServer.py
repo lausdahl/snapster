@@ -53,7 +53,7 @@ class FileShareServer(Thread):
                 else:
                     message = str(self.elements[0])
                     if (message == "Download"):
-                        self.__HandleDownloadFile()
+                        self.__HandleDownloadFile(self.element[1])
                     else:
                         self.__HandleUnknownMessage(message)
                 self.client.close()
