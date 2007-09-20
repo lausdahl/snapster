@@ -228,11 +228,11 @@ class Server(Thread):
             #print "__SendQueryHit, Connecting to: " + str(reciever.ip) + ":" + str(reciever.port)
             s.connect((reciever.ip, reciever.port))
             totalsent = 0
-            s = Settings()
-            path = s.SharingFolderPath
+            settings = Settings()
+            path = settings.SharingFolderPath
             sf = SharedFolder(path)
-            si=sf.GetSharedFileInfo(key)
-            message = "QueryHit|" + str(key) + "|" + str(Settings().GetAppNode().ToMessage())+"&"+str(si.Name)+"|"+str(si.Size)
+            si = sf.GetSharedFileInfo(key)
+            message = "QueryHit|" + str(key) + "|" + str(Settings().GetAppNode().ToMessage())+"&"+str(si.Name())+"|"+str(si.Size())
             #print "SendQueryhit: Sending: " + message
             try:
                 while totalsent < len(message):
@@ -294,19 +294,21 @@ class Server(Thread):
         sharePort = int(nodeElements[3])
         peer = str(nodeElements[4])
         
-        #fileList = str(elements[7])
+        files = fileList.split('|')
+        fileName = files[0]
+        fileSize = files[1]
         print "__HandleQueryHit, fileList: " + fileList
         
-        #dl = DownloadList()
-        #di = DownloadItem()
-        #di.SetKeyword(keyword)
-        #di.SetFilename(filename)
-        #di.SetIp(ip)
-        #di.SetPeer(peer)
-        #di.SetPort(sharePort)
-        #di.SetId(random.randint(0, 200000))
-        #
-        #dl.append(di)
+        dl = DownloadList()
+        di = DownloadItem()
+        di.SetKeyword(keyword)
+        di.SetFilename(fileName)
+        di.SetIp(ip)
+        di.SetPeer(peer)
+        di.SetPort(sharePort)
+        di.SetId(random.randint(0, 200000))
+
+        dl.append(di)
         
         #print "\nFound '" + str(elements[1]) + "', at: '" + str(elements[2]) + "'"
         

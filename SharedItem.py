@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+import os
 
 class SharedItem:
     def __init__(self, name=None,qualifiedname=None,size=None):
@@ -8,18 +9,18 @@ class SharedItem:
         self.relevance = None
         
     def Name(self):
-        return name
+        return str(self.name)
     
     def Qualifiedname(self):
-        return qualifiedname
+        return str(self.qualifiedname)
     
     #bytes
     def Size(self):
-        return size
+        return int(self.size)#os.path.getsize(self.Qualifiedname()))
     
     #is set when the object is returned due to a search
     def Relevance(self):
-        return relevance
+        return str(self.relevance)
     
     def Print(self):
         print "name: ", str(self.name)
