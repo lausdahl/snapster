@@ -227,7 +227,9 @@ class Server(Thread):
             #print "__SendQueryHit, Connecting to: " + str(reciever.ip) + ":" + str(reciever.port)
             s.connect((reciever.ip, reciever.port))
             totalsent = 0
-            message = "QueryHit|" + str(key) + "|" + str(Settings().GetAppNode().ToMessage())
+            sf = SharedFolder()
+            si=sf.GetSharedFileInfo(key)
+            message = "QueryHit|" + str(key) + "|" + str(Settings().GetAppNode().ToMessage())+"&"+str(si.Name)+"|"+str(si.Size)
             #print "SendQueryhit: Sending: " + message
             try:
                 while totalsent < len(message):
