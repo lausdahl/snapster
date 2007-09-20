@@ -1,0 +1,17 @@
+<?xml version="1.0" ?>
+<Snapster>
+    <app>
+        <MaxNeighbourCount>3</MaxNeighbourCount>
+        <rediscovery_delay_ms>5000</rediscovery_delay_ms>
+        <port>220</port>
+        <id>Claus</id>
+        <quality>9</quality>
+        <ip>10.11.79.231</ip>
+        <startServer>1</startServer>
+        <startDiscovery>0</startDiscovery>
+        <NumberOfKWalkers>3</NumberOfKWalkers>
+        <fileSharePort>420</fileSharePort>
+    </app>  
+    <bootstrap>
+    </bootstrap>
+</Snapster>
