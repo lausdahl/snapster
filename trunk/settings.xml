@@ -3,15 +3,22 @@
     <app>
         <MaxNeighbourCount>3</MaxNeighbourCount>
         <rediscovery_delay_ms>5000</rediscovery_delay_ms>
-        <port>220</port>
-        <id>Claus</id>
-        <quality>9</quality>
+        <port>800</port>
+        <id>Kenneth Server Test IDE</id>
+        <quality>5</quality>
         <ip>10.11.79.231</ip>
         <startServer>1</startServer>
-        <startDiscovery>0</startDiscovery>
+        <startDiscovery>1</startDiscovery>
         <NumberOfKWalkers>3</NumberOfKWalkers>
-        <fileSharePort>420</fileSharePort>
+        <fileSharePort>400</fileSharePort>
     </app>  
     <bootstrap>
+        <node>
+            <guid>Claus</guid>
+            <ip>172.22.185.73</ip>
+            <port>220</port>
+            <quality>10</quality>
+        </node>
+  
     </bootstrap>
 </Snapster>
