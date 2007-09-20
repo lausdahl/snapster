@@ -11,6 +11,7 @@
         <startDiscovery>1</startDiscovery>
         <NumberOfKWalkers>3</NumberOfKWalkers>
         <fileSharePort>400</fileSharePort>
+        <sharingFolder>Files</sharingFolder>
     </app>  
     <bootstrap>
         <node>
