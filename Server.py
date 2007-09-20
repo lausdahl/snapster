@@ -281,24 +281,29 @@ class Server(Thread):
             print('ForwardQuery, Cannot connect to: ' + str(reciever.ip))
             
     def __HandleQueryHit(self, message):
-        elements = message.split('|')
-        keyword = str(elements[1])
-        ip = str(elements[2])
-        sharePort = int(elements[3])
-        peer = str(elements[4])
-        fileList = str(elements[7])
+        elements = message.split('&')
+        nodeInfo = elements[0]
+        fileList = elements[1]
+        
+        nodeElements = nodeInfo.split('|')
+        keyword = str(nodeElements[1])
+        ip = str(nodeElements[2])
+        sharePort = int(nodeElements[3])
+        peer = str(nodeElements[4])
+        
+        #fileList = str(elements[7])
         print "__HandleQueryHit, fileList: " + fileList
         
-        dl = DownloadList()
-        di = DownloadItem()
-        di.SetKeyword(keyword)
-        di.SetFilename(filename)
-        di.SetIp(ip)
-        di.SetPeer(peer)
-        di.SetPort(sharePort)
-        di.SetId(random.randint(0, 200000))
-        
-        dl.append(di)
+        #dl = DownloadList()
+        #di = DownloadItem()
+        #di.SetKeyword(keyword)
+        #di.SetFilename(filename)
+        #di.SetIp(ip)
+        #di.SetPeer(peer)
+        #di.SetPort(sharePort)
+        #di.SetId(random.randint(0, 200000))
+        #
+        #dl.append(di)
         
         #print "\nFound '" + str(elements[1]) + "', at: '" + str(elements[2]) + "'"
         
