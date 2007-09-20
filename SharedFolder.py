@@ -82,20 +82,6 @@ class SharedFolder:
                         match = True
                         break
         return match
-        """ret = []
-        key = key.lower()
-        if key != " " and key != ""):
-            if self.mapping.has_key(key)):
-                item = self.mapping[key]
-                item.relevance = self.__relevance(len(key),len(key),4)
-                ret.append(item)
-            else:
-                for name in self.mapping:
-                    if -1 != str(name).find(key)):
-                        item = self.mapping[name]
-                        item.relevance = self.__relevance(len(key),len(name),4)
-                        ret.append(item)
-        return ret"""
     
     #returns the first hit stumpled upon without regard for relevance, i.e. even if a file with higher relevance exists, we don't care
     def GetSharedFileInfo(self,key):
@@ -111,45 +97,7 @@ class SharedFolder:
                         item = self.mapping[name]
                         item.relevance = self.__relevance(len(key),len(name),4)
         return item
-    """
-    def __sortmapping(self,list):
-        relevancelist = []
-        ret = []
-       for item in list:
-            relevancelist.append(float(item.relevance))
     
-        sortedrelevancelist = self.qsort(relevancelist) #sorted list of hit-percentages
-        run = True
-        while(run):    
-            for item2 in list:
-                for i in range(len(sortedrelevancelist)):
-                    #print(len(ret),"  ",len(sortedrelevancelist))
-                    #print("compare:", float(item2.relevance), " with ",float(item3))
-                    if float(item2.relevance) == float(sortedrelevancelist[i]):
-                        ret.append(item2)
-                    if len(ret) == len(sortedrelevancelist):
-                        run = False;
-                        break
-        return ret
-    
-    def qsort(self,list):
-        if list == []:
-            return []
-        else:
-            pivot = list.pop(randrange(len(list)))
-            lesser = self.qsort([l for l in list if l.relevance < pivot])
-            greater = self.qsort([l for l in list if l.relevance >= pivot])
-            return lesser + [pivot] + greater
-        
-    #def qsort(self,list):
-    #    if list == []:
-    #        return []
-    #    else:
-    #        pivot = list.pop(randrange(len(list)))
-    #        lesser = self.qsort([l for l in list if l < pivot])
-    #        greater = self.qsort([l for l in list if l >= pivot])
-    #        return lesser + [pivot] + greater
-    """
     def SharedFilesCount(self):
         return self.sharedfiles
     
