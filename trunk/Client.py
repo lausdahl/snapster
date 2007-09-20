@@ -105,33 +105,37 @@ class Client(Thread):
         return kWalker
     
     def __DownloadFile(self, item):
-        if(hostNode != None):
-            dl = DownloadList()
-            di = dl.GetDownloadItemFromId(item)
-            if (di is None):
-                return
+        dl = DownloadList()
+        di = dl.GetDownloadItemFromId(item)
+        if (di is None):
+            return
+          
+        try:
+            s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+            s.settimeout(10)
+            #print 'Download, connect ip: ' + str(di.GetIp()) + ' Port: ' + str(di.GetPort())
+            s.connect((di.GetIp(), di.GetPort()))
+            #print 'connected'
+            totalsent = 0
+            message = "Download|" + di.GetFilename()
             
             try:
-                s.connect((hostNode.ip, hostNode.fileSharePort))
-                
-                totalsent = 0
-                message = di.GetKeyword()
-                
-                try:
-                    while totalsent < len(message):
-                        sent = s.send(message[totalsent:])
-                        if sent == 0:
-                            raise RuntimeError, "socket connection broken"
-                        totalsent = totalsent + sent
-                except socket.error:
-                    print('__DownloadFile, Send failed')
-                
-                f = open(file,"wb")
-                while 1:
-                    data = s.recv(1024)
-                    if not data: break
-                    f.write(data)
-                f.close()  
-            except socet.error:
-                print('__DownloadFile, Recieve failed')
+                while totalsent < len(message):
+                    sent = s.send(message[totalsent:])
+                    if sent == 0:
+                        raise RuntimeError, "socket connection broken"
+                    totalsent = totalsent + sent
+                print 'Download request send on: ' + di.GetFilename()
+            except socket.error:
+                print('__DownloadFile, Send failed')
+            
+            f = open(Settings().DownloadFolderPath + '\\' + di.GetFilename(),"wb")
+            while 1:
+                data = s.recv(1024)
+                if not data: break
+                f.write(data)
+            f.close()
+            print 'Download: ' + di.GetFilename()
+        except socket.error:
+            print('__DownloadFile, Recieve failed')
 
