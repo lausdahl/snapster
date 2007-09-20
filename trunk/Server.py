@@ -4,6 +4,7 @@ import socket
 from threading import Thread
 from List import List
 from SharedFolder import SharedFolder
+from SharedItem import SharedItem
 from Settings import Settings
 from FileShareServer import FileShareServer
 from DownloadItem import DownloadItem
@@ -205,7 +206,7 @@ class Server(Thread):
         queryRequestNode.SetNodeFromMessage(message)
         
         #print query
-        print "\nRecieved query: " + key + ", from: " + self.elements[3]
+        #print "\nRecieved query: " + key + ", from: " + self.elements[3]
         #print "__HandleQuery, self.elements[3]: " + self.elements[3]
         
         #first vi search
@@ -220,7 +221,7 @@ class Server(Thread):
             self.__ForwardQuery(message, queryRequestNode)
         
     def __SendQueryHit(self, key, reciever):
-        print "\nForwarding query '" + key + "', to '" + str(reciever.ip) + "'"
+        print "\nSending queryHit on '" + key + "', to '" + str(reciever.ip) + "'"
         s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         s.settimeout(10)
         #connect to node
@@ -228,12 +229,10 @@ class Server(Thread):
             #print "__SendQueryHit, Connecting to: " + str(reciever.ip) + ":" + str(reciever.port)
             s.connect((reciever.ip, reciever.port))
             totalsent = 0
-            settings = Settings()
-            path = settings.SharingFolderPath
-            sf = SharedFolder(path)
+            
+            sf = SharedFolder(Settings().SharingFolderPath)
             si = sf.GetSharedFileInfo(key)
-            message = "QueryHit|" + str(key) + "|" + str(Settings().GetAppNode().ToMessage())+"&"+str(si.Name())+"|"+str(si.Size())
-            #print "SendQueryhit: Sending: " + message
+            message = "QueryHit|" + str(key) + "|" + str(Settings().GetAppNode().ToMessage()) + "&" + str(si.ToMessage())
             try:
                 while totalsent < len(message):
                     sent = s.send(message[totalsent:])
@@ -256,7 +255,7 @@ class Server(Thread):
         count = 0
         kWalker = []
         for n in NeighbourList.NeighbourList().GetAll():
-            if (n.id == senderNode.id):
+            if (str(n.id) == str(senderNode.id)):
                 continue
             if(count <= kwCount):
                 kWalker.append(n)
@@ -288,8 +287,9 @@ class Server(Thread):
         elements = message.split('&')
         nodeInfo = elements[0].split('|')
         fileList = elements[1]
-        message = ''
+
         keyword = nodeInfo[1]
+        message = ""
         for i in range(0,self.NODE_LENGTH):
             message = message + str(nodeInfo[i+2]) + "|"
         message = message[:-1]
@@ -299,8 +299,10 @@ class Server(Thread):
         #host.Show()
         
         files = fileList.split('|')
-        fileName = files[0]
-        fileSize = files[1]
+        si = SharedItem().SetFromMessage(fileList)
+        fileName = si.Name()
+        fileSize = si.Size()
+        fileRelevance = si.Relevance()
         #print "__HandleQueryHit, fileList: " + fileList
         
         di = DownloadItem()
