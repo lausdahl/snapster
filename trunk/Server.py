@@ -6,8 +6,11 @@ from List import List
 from SharedFolder import SharedFolder
 from Settings import Settings
 from FileShareServer import FileShareServer
+from DownloadItem import DownloadItem
+from DownloadList import DownloadList
 import select
 import sys
+import random
 
 class Server(Thread):
     currentNode = None
@@ -277,7 +280,25 @@ class Server(Thread):
             
     def __HandleQueryHit(self, message):
         elements = message.split('|')
-        print "\nFound '" + str(elements[1]) + "', at: '" + str(elements[2]) + "'"
+        keyword = str(elements[1])
+        ip = str(elements[2])
+        sharePort = int(elements[3])
+        peer = str(elements[4])
+        fileList = str(elements[7])
+        print "__HandleQueryHit, fileList: " + fileList
+        
+        dl = DownloadList()
+        di = DownloadItem()
+        di.SetKeyword(keyword)
+        di.SetFilename(filename)
+        di.SetIp(ip)
+        di.SetPeer(peer)
+        di.SetPort(sharePort)
+        di.SetId(random.randint(0, 200000))
+        
+        dl.append(di)
+        
+        #print "\nFound '" + str(elements[1]) + "', at: '" + str(elements[2]) + "'"
         
         
         
