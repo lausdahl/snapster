@@ -8,6 +8,7 @@ class DownloadItem:
         self.port = 0
         self.id = 0
         self.peer = ""
+        self.relevance = ""
         
     def SetFilename(self, filename):
         self.filename = filename
@@ -45,8 +46,14 @@ class DownloadItem:
     def GetPeer(self):
         return self.peer
         
+    def SetRelevance(self, relevance):
+        self.relevance = relevance
+        
+    def GetRelevance(self):
+        return self.relevance
+        
     def Print(self):
-        print "|" + str(self.id) + "\t|" + self.keyword + "\t|" + self.filename + "\t|" + self.peer
+        print "|" + str(self.id) + "\t" + str(self.relevance) + "\t|" + self.keyword + "\t|" + self.filename + "\t|" + self.peer
         
     def SetFromMessage(self, message):
         elements = message.split('|')
@@ -59,3 +66,7 @@ class DownloadItem:
             self.SetPeer(str(elements[5]))
             return True
         return False
+    
+    
+    
+    
