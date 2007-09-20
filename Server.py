@@ -288,27 +288,30 @@ class Server(Thread):
         nodeInfo = elements[0]
         fileList = elements[1]
         
-        nodeElements = nodeInfo.split('|')
-        keyword = str(nodeElements[1])
-        ip = str(nodeElements[2])
-        sharePort = int(nodeElements[3])
-        peer = str(nodeElements[4])
+        keyword = nodeInfo[1]
+        for i in range(0,self.NODE_LENGTH):
+            message = message + str(self.nodeInfo[i+2]) + "|"
+        message = message[:-1]
+        
+        host = Node.Node()
+        host.SetNodeFromMessage(message)
+        host.Show()
         
         files = fileList.split('|')
         fileName = files[0]
         fileSize = files[1]
-        print "__HandleQueryHit, fileList: " + fileList
+        #print "__HandleQueryHit, fileList: " + fileList
         
-        dl = DownloadList()
         di = DownloadItem()
         di.SetKeyword(keyword)
         di.SetFilename(fileName)
-        di.SetIp(ip)
-        di.SetPeer(peer)
-        di.SetPort(sharePort)
+        di.SetIp(host.ip)
+        di.SetPeer(host.id)
+        di.SetPort(host.fileSharePort)
         di.SetId(random.randint(0, 200000))
 
-        dl.append(di)
+        dl = DownloadList()
+        dl.Add(di)
         
         #print "\nFound '" + str(elements[1]) + "', at: '" + str(elements[2]) + "'"
         
