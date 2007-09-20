@@ -12,6 +12,7 @@
         <NumberOfKWalkers>3</NumberOfKWalkers>
         <fileSharePort>400</fileSharePort>
         <sharingFolder>Files</sharingFolder>
+        <downloadFolder>Downloads</downloadFolder>
     </app>  
     <bootstrap>
         <node>

@@ -21,6 +21,7 @@ class Settings:
         self.fileSharePort = int(s[9])
         self.Ttl = 1
         self.SharingFolderPath = sys.path[0] + '\\' + str(s[10])
+        self.DownloadFolderPath = sys.path[0] + '\\' + str(s[11])
 
     def GetBootStrapNodes(self):
         return self.handler.ReadBootStrapNodes()
