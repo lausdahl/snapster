@@ -5,7 +5,7 @@ import os
 from os import stat
 import SharedItem
 
-#       implement support for multiple search-parameters
+#todo: implement support for multiple search-parameters
 class SharedFolder:
     #errhandler = ErrorHandler.ErrorHandler()
     mapping = {}
@@ -80,23 +80,7 @@ class SharedFolder:
                     if -1 != str(name).find(key):
                         match = True
                         break
-        return match
-        """ret = []
-        key = key.lower()
-        if key != " " and key != ""):
-            if self.mapping.has_key(key)):
-                item = self.mapping[key]
-                item.relevance = self.__relevance(len(key),len(key),4)
-                ret.append(item)
-            else:
-                for name in self.mapping:
-                    if -1 != str(name).find(key)):
-                        item = self.mapping[name]
-                        item.relevance = self.__relevance(len(key),len(name),4)
-                        ret.append(item)
-        return ret"""
-            
-    
+        return match    
 
     #returns an sorted list of SharedItem objects, i.e. the list is sorted according to relevance (highest first)
     def GetSharedFiles(self,key):
