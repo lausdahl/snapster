@@ -5,7 +5,6 @@ import os
 from os import stat
 import SharedItem
 
-#todo:  KIG PAA qsort1a:  print(relevancelist)-  DEN SORTERER IKKE TALLENE KORREKT. Er det overhovede tal? Fungerer det, hvis du giver den en list med tal
 #       implement support for multiple search-parameters
 class SharedFolder:
     #errhandler = ErrorHandler.ErrorHandler()
@@ -82,6 +81,40 @@ class SharedFolder:
                         match = True
                         break
         return match
+        """ret = []
+        key = key.lower()
+        if key != " " and key != ""):
+            if self.mapping.has_key(key)):
+                item = self.mapping[key]
+                item.relevance = self.__relevance(len(key),len(key),4)
+                ret.append(item)
+            else:
+                for name in self.mapping:
+                    if -1 != str(name).find(key)):
+                        item = self.mapping[name]
+                        item.relevance = self.__relevance(len(key),len(name),4)
+                        ret.append(item)
+        return ret"""
+            
+    
+
+    #returns an sorted list of SharedItem objects, i.e. the list is sorted according to relevance (highest first)
+    def GetSharedFiles(self,key):
+        ret = []
+        key = key.lower()
+        item = SharedItem.SharedItem()
+        if key != " " and key != "": #we only traverse the dictionary if we have to
+            if self.mapping.has_key(key):
+                item = self.mapping[key]
+                item.relevance = self.__relevance(len(key),len(key),4)
+                ret.append(item)
+            else:
+                for name in self.mapping:
+                    if -1 != str(name).find(key):
+                        item = self.mapping[name]
+                        item.relevance = self.__relevance(len(key),len(name),4)
+                        ret.append(item)
+        return self.__sort(ret)
     
     #returns the first hit stumpled upon without regard for relevance, i.e. even if a file with higher relevance exists, we don't care
     def GetSharedFileInfo(self,key):
@@ -97,7 +130,7 @@ class SharedFolder:
                         item = self.mapping[name]
                         item.relevance = self.__relevance(len(key),len(name),4)
         return item
-    
+   
     def SharedFilesCount(self):
         return self.sharedfiles
     
@@ -107,4 +140,23 @@ class SharedFolder:
     def SetSharedFolderPath(self, path):
         if self.__checkpath(self.path):
             self.path = path
+            
+    #implementation of the quicksort algorithm. It maintains 3 lists x, y and pivot (pivot should be selected randomly)
+    #in pseudo code, the method does the following:
+    #
+    #   select a pivot value from list (one-dimensional list)
+    #   for each x,y in list (where x and y traverse the same objects in list)
+    #        if x.relevance < pivot.relevance then add x to less
+    #        if y.relevance = pivot.relevance then add x to pivotList
+    #        if y.relevance > pivot.relevance then add x to greater
+    #   concatenate(quicksort(less), pivotList, quicksort(greater))
+    #
+    #the lists less, pivotList and greater are not directly present as variables in this implementation due to list comprehensions in Python
+    #
+    # concatenate(quicksort(less), pivotList, quicksort(greater)) ~ self.__sort(...) + [pivot] + self.__sort(...)
+    def __sort(self,list):
+        if list == []: return []
+        pivot = list[0]
+        return  self.__sort([x for x in list[1:] if float(x.relevance) >= float(pivot.relevance)]) + [pivot] + \
+                self.__sort([y for y in list[1:] if float(y.relevance) < float(pivot.relevance)])
         
