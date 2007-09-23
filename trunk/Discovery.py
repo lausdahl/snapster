@@ -44,9 +44,7 @@ class Discovery(Thread):
         for node in nodeList:
             if (self.stopRun == True):
                 return
-            if (not self.__Ping(node)):
-                self.list.RemoveNodeFromList(node)
-            else:
+            if (self.__Ping(node)):
                 self.list.AddNode(node)
         
     def __Ping(self, node=Node):
