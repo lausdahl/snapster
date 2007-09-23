@@ -102,7 +102,6 @@ class List:
                     break
             if (not foundNode):
                 newList.append(n)
-                self.count=self.count+1
         self.nodelist = newList[:]
     
     def Clear(self):
