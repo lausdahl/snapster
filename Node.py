@@ -5,18 +5,22 @@ import GUID
 class Node:
     #def __init__(self):
     #    self.id=GUID.GUID().uuid()
-    id=''
-    quality=0
-    port=0
-    ip=''
-    numberOfNeighbours=0
-    fileSharePort=0
+    id = ""
+    quality = 0
+    port = 0
+    ip = ""
+    numberOfNeighbours = 0
+    fileSharePort = 0
+    
     def Show(self):
-        print('ID: ' + str(self.id) +' IP: '+ str(self.ip)+' Port: '+str(self.port)+' Quality: '+str(self.quality)+ ' #Neighbour: '+ str(self.numberOfNeighbours) + ' FileSharingPort: ' + str(self.fileSharePort))
+        print('ID: ' + str(self.id) + ' IP: '+ str(self.ip)+' Port: '+str(self.port)+' Quality: '+str(self.quality)+ ' #Neighbour: '+ str(self.numberOfNeighbours) + ' FileSharingPort: ' + str(self.fileSharePort))
+    
     def ToString(self):
-        return ('ID: ' + str(self.id) +' IP: '+ str(self.ip)+' Port: '+str(self.port)+' Quality: '+str(self.quality)+ ' #Neighbour: '+ str(self.numberOfNeighbours)+ ' FileSharingPort: ' + str(self.fileSharePort))
+        return ('ID: ' + str(self.id) + ' IP: '+ str(self.ip)+' Port: '+str(self.port)+' Quality: '+str(self.quality)+ ' #Neighbour: '+ str(self.numberOfNeighbours)+ ' FileSharingPort: ' + str(self.fileSharePort))
+    
     def ToMessage(self):
-        return (str(self.ip)+'|'+str(self.port)+'|'+str(self.id)+'|'+str(self.quality)+'|'+str(self.numberOfNeighbours)+'|'+str(self.fileSharePort))
+        return (str(self.ip) + '|' + str(self.port) + '|' + str(self.id) + '|' + str(self.quality) + '|' + str(self.numberOfNeighbours) + '|' + str(self.fileSharePort))
+    
     def SetNodeFromMessage(self, message):
         #print(message)
         message = str(message)

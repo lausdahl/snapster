@@ -18,6 +18,7 @@ import random
 class Server(Thread):
     currentNode = None
     NODE_LENGTH=6
+    
     def __init__(self, me=Node):
         Thread.__init__(self)
         self.currentNode = me
@@ -109,27 +110,27 @@ class Server(Thread):
         self.client.close()
             
     def __HandleNeighbourRequest(self):
-        
         if(len(self.elements)<self.NODE_LENGTH):
             print "Error no guid recieved as a node"
-        message=''
+
+        message = ""
         for i in range(0,self.NODE_LENGTH):
             message=message+str(self.elements[i+1])+"|"
         message = message[:-1]
             
         newNode = Node.Node()
         newNode.SetNodeFromMessage(message)
-        #print "Message: " + str(message)
+        print "__HandleNeighbourRequest, Message: " + str(message)
         acceptAsNeighbour = False
         
         if (self.neighbourList.Contains(newNode)):
             # already there
             acceptAsNeighbour = True
-            #print "Friend already exists: " + str(newNode.ip)
+            print "__HandleNeighbourRequest, Friend already exists: " + str(newNode.ip)
         elif (not self.neighbourList.IsFull()):
             #we have room
             self.neighbourList.Add(newNode)
-            #print "Added new friend: " + str(newNode.ip)
+            print "__HandleNeighbourRequest, Added new friend: " + str(newNode.ip)
             acceptAsNeighbour = True
         else:
             #We have not room, so find a node to drop
@@ -163,11 +164,11 @@ class Server(Thread):
                     print('Error in drop socket')
                 self.neighbourList.Remove(nodeToDrop)
                 self.neighbourList.Add(newNode)
-                #print "Added new friend: " + str(newNode.ip) + " in stead of: " + str(nodeToDrop.ip)
+                print "__HandleNeighbourRequest, Added new friend: " + str(newNode.ip) + " in stead of: " + str(nodeToDrop.ip)
                 acceptAsNeighbour=True
                 
         if(acceptAsNeighbour):
-            self.client.send("YES|"+str(self.currentNode.ToMessage()))
+            self.client.send("YES|" + str(self.currentNode.ToMessage()))
         else:
             self.client.send("NO")
 
