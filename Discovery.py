@@ -43,7 +43,7 @@ class Discovery(Thread):
         #print "__FindPeers, nodeList: " + str(nodeList)
         self.list.Clear()
         for node in nodeList:
-            print "__FindPeers, finding node: " + node.ToString()
+            #print "__FindPeers, finding node: " + node.ToString()
             if (self.stopRun):
                 return
             if (self.__Ping(node)):
@@ -137,7 +137,7 @@ class Discovery(Thread):
             s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
             s.settimeout(5)
             s.connect((node.ip, node.port))
-            print "__RequestToBeNeighbours, message: " + message
+            #print "__RequestToBeNeighbours, message: " + message
             while totalsent < len(message):
                 sent = s.send(message[totalsent:])
                 if sent == 0:

@@ -132,17 +132,17 @@ class Server(Thread):
             
         newNode = Node.Node()
         newNode.SetNodeFromMessage(message)
-        print "__HandleNeighbourRequest, Message: " + str(message)
+        #print "__HandleNeighbourRequest, Message: " + str(message)
         acceptAsNeighbour = False
         
         if (self.neighbourList.Contains(newNode)):
             # already there
             acceptAsNeighbour = True
-            print "__HandleNeighbourRequest, Friend already exists: " + str(newNode.ip)
+            #print "__HandleNeighbourRequest, Friend already exists: " + str(newNode.ip)
         elif (not self.neighbourList.IsFull()):
             #we have room
             self.neighbourList.Add(newNode)
-            print "__HandleNeighbourRequest, Added new friend: " + str(newNode.ip)
+            #print "__HandleNeighbourRequest, Added new friend: " + str(newNode.ip)
             acceptAsNeighbour = True
         else:
             #We have not room, so find a node to drop
@@ -176,7 +176,7 @@ class Server(Thread):
                     print('Error in drop socket')
                 self.neighbourList.Remove(nodeToDrop)
                 self.neighbourList.Add(newNode)
-                print "__HandleNeighbourRequest, Added new friend: " + str(newNode.ip) + " in stead of: " + str(nodeToDrop.ip)
+                #print "__HandleNeighbourRequest, Added new friend: " + str(newNode.ip) + " in stead of: " + str(nodeToDrop.ip)
                 acceptAsNeighbour=True
                 
         if(acceptAsNeighbour):

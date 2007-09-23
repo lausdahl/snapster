@@ -98,7 +98,7 @@ class List:
             for newNode in newList:
                 if (str(n.id) == str(newNode.id)):
                     foundNode = True
-                    print "Replacing #neighbours, " + str(newNode.numberOfNeighbours) + ", with " + str(n.numberOfNeighbours)
+                    #print "Replacing #neighbours, " + str(newNode.numberOfNeighbours) + ", with " + str(n.numberOfNeighbours)
                     newNode.numberOfNeighbours = n.numberOfNeighbours
                     break
             if (not foundNode):
