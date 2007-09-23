@@ -91,13 +91,13 @@ class Discovery(Thread):
     
     def __FindNeighbours(self):
         nodeList = self.list.GetNodes()
-        print "__FindNeighbours, nodeList: " + str(nodeList)
+        #print "__FindNeighbours, nodeList: " + str(nodeList)
         if (nodeList is None):
             return
         
-        print "__FindNeighbours, Finding neighbours"
+        #print "__FindNeighbours, Finding neighbours"
         for node in nodeList:
-            print "__FindNeighbours, Asking node: " + node.ToString()
+            #print "__FindNeighbours, Asking node: " + node.ToString()
             if (self.stopRun):
                 return
             
