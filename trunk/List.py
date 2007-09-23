@@ -96,9 +96,10 @@ class List:
         for n in self.nodelist:
             foundNode = False
             for newNode in newList:
-                if (str(n.id) == str(newNode.id) and n.modified > newNode.modified):
+                if (str(n.id) == str(newNode.id)):
                     foundNode = True
-                    newNode.numberOfNeighbours=n.numberOfNeighbours
+                    print "Replacing #neighbours, " + str(newNode.numberOfNeighbours) + ", with " + str(n.numberOfNeighbours)
+                    newNode.numberOfNeighbours = n.numberOfNeighbours
                     break
             if (not foundNode):
                 newList.append(n)
