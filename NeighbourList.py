@@ -7,7 +7,7 @@ from Settings import Settings
 class NeighbourList(List):
     def __init__(self):
         List.__init__(self)
-        List.filename = "NeighbourList.snapster"
+        self.filename = "NeighbourList.snapster"
         self.maxNeighbours = Settings().MaxNeighbourCount
     
     def GetAll(self):

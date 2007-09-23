@@ -62,7 +62,7 @@ class Server(Thread):
                 self.client, address = self.s.accept()
                 data = self.client.recv(size)
                 #print "Client connected from " + str(address)
-                #print "Message recieved: " + str(data)
+                print "__RecieveMessage, Message recieved: " + str(data)
                 self.elements = str(data).split('|')
                 if (len(self.elements) == 0):
                     print "Unknown message: " + str(data)
@@ -98,7 +98,7 @@ class Server(Thread):
         #print "Ping recieved"
         totalsent = 0
         message = List().ToMessage()
-        #print "Answering with: " + str(message)
+        print "__HandlePing, Answering with: " + str(message)
         try:
             while totalsent < len(message):
                 sent = self.client.send(message[totalsent:])
@@ -189,7 +189,7 @@ class Server(Thread):
     def __HandleAwakeRespone(self):
         #Return the number of currentConnected neightbours
         count = str(self.neighbourList.Count())
-        self.client.send("YES,"+ count)
+        self.client.send("YES," + count)
     
     def __HandleUnknownMessage(self, message):
         pass
