@@ -40,11 +40,13 @@ class Discovery(Thread):
         
     def __FindPeers(self):
         nodeList = Settings().GetBootStrapNodes()#self.list.GetNodes()
+        #print "__FindPeers, nodeList: " + str(nodeList)
         self.list.Clear()
         for node in nodeList:
+            print "__FindPeers, finding node: " + node.ToString()
             if (self.stopRun):
                 return
-            if (not self.__Ping(node)):
+            if (self.__Ping(node)):
                 self.list.AddNode(node)
         
     def __Ping(self, node=Node):
@@ -84,10 +86,12 @@ class Discovery(Thread):
             s.close()
         except socket.error:
             print('Ping, Cannot connect')
+            returnValue = False
         return returnValue
     
     def __FindNeighbours(self):
         nodeList = self.list.GetNodes()
+        print "__FindNeighbours, nodeList: " + str(nodeList)
         if (nodeList is None):
             return
         

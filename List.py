@@ -11,7 +11,7 @@ class List:
     
     def __ReadNodesFromFile(self):
         self.nodelist = []
-        print "__ReadNodesFromFile, Reading nodes from file: " + self.filename
+        #print "__ReadNodesFromFile, Reading nodes from file: " + self.filename
         for line in open(self.filename, "r").readlines():
             if(len(line)>2):
                 readNode = Node()
@@ -86,7 +86,7 @@ class List:
         self.SaveNodes()
         
     def AddNode(self, node):
-        print "List-AddNode, Adding node to list: " + self.filename
+        #print "List-AddNode, Adding node to list: " + self.filename
         self.nodelist.append(node)
         self.__CheckForDuplicates()
         self.SaveNodes()
