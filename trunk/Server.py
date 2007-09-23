@@ -96,6 +96,18 @@ class Server(Thread):
                 
     def __HandlePing(self):
         #print "Ping recieved"
+        
+        #add node to list
+        message = ""
+        for i in range(0,self.NODE_LENGTH):
+            message = message + str(self.elements[i+1]) + "|"
+        message = message[:-1]
+            
+        newNode = Node.Node()
+        if (not newNode.SetNodeFromMessage(message)):
+            return
+        List.AddNode(newNode)
+        
         totalsent = 0
         message = List().ToMessage()
         print "__HandlePing, Answering with: " + str(message)
@@ -110,7 +122,7 @@ class Server(Thread):
         self.client.close()
             
     def __HandleNeighbourRequest(self):
-        if(len(self.elements)<self.NODE_LENGTH):
+        if(len(self.elements) < self.NODE_LENGTH):
             print "Error no guid recieved as a node"
 
         message = ""
