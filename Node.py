@@ -2,6 +2,8 @@
 
 #Class with information about a node
 import GUID
+import time
+
 class Node:
     #def __init__(self):
     #    self.id=GUID.GUID().uuid()
@@ -11,6 +13,7 @@ class Node:
     ip = ""
     numberOfNeighbours = 0
     fileSharePort = 0
+    modified = time.time()
     
     def Show(self):
         print('ID: ' + str(self.id) + ' IP: '+ str(self.ip)+' Port: '+str(self.port)+' Quality: '+str(self.quality)+ ' #Neighbour: '+ str(self.numberOfNeighbours) + ' FileSharingPort: ' + str(self.fileSharePort))
