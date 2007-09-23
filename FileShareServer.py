@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+
 import NeighbourList
 import Node
 import socket
@@ -39,27 +41,21 @@ class FileShareServer(Thread):
         self.s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.s.bind(('', self.currentNode.fileSharePort))
         self.s.listen(backlog)
-        #self.s.setblocking(0)
         while self.terminateServer==0:
             resetSocket = False
             (rd, wr, ex) = select.select([self.s], [], [], 2.0)
-            #print (rd, wr, ex)
             if (len(rd) > 0 and self.terminateServer == 0):
                 try:
-                    print "ShareServer, Client connected"
+                    #print "ShareServer, Client connected"
                     self.client, address = self.s.accept()
                     data = self.client.recv(size)
-                    print "ShareServer, data: " + data
+                    #print "ShareServer, data: " + data
                     
                     self.elements = str(data).split('|')
-                    if (len(self.elements) == 0):
-                        print "Unknown message: " + str(data)
-                    else:
+                    if (len(self.elements) > 0):
                         message = str(self.elements[0])
                         if (message == "Download"):
                             self.__HandleDownloadFile(self.elements[1])
-                        else:
-                            self.__HandleUnknownMessage(message)
                     self.client.close()
                 except socket.error:
                     resetSocket = True
@@ -78,8 +74,13 @@ class FileShareServer(Thread):
         file = Settings().SharingFolderPath + "\\" + fileName
         if (os.path.exists(file)):
             f = open(file, "rb")
-            data = f.read()
+            while 1:
+                data = f.read(1024)
+                if (len(data) > 0):
+                    sent = s.send(data[totalsent:])
+                    if sent == 0:
+                        break
+                else:
+                    break
             f.close()
             self.client.send(data)
-        
-        self.client.close()

@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+
 import time, random, md5
 #GUID generator
 class GUID:

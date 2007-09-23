@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+
 from Node import Node
 from Settings import Settings
 class List2:

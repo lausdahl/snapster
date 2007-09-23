@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+
 from DownloadItem import DownloadItem
 
 class DownloadList:
@@ -19,14 +20,14 @@ class DownloadList:
     def __SaveList(self):
         file = open(self.filename, "w")
         for di in self.downloadList:
-            file.write(str(di.GetId()) + "|" + di.GetKeyword() + "|" + di.GetFilename() + "|" + di.GetIp() + "|" + str(di.GetPort()) + "|" + di.GetPeer())
+            file.write(di.ToMessage())
             file.write("\n")
         file.write("\n")
         file.close()
                     
     def Print(self):
         self.__ReadList()
-        print "\n|Id\tRelevance\t|Keyword\t|Filename\t|Peer"
+        print "\n|Id\t|Relevance\t|Keyword\t|Filename\t|Size\t|Peer"
         
         for downloadItem in self.downloadList:
             downloadItem.Print()

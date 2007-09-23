@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+
 import NeighbourList
 import Node
 import socket
@@ -231,8 +233,16 @@ class Server(Thread):
             totalsent = 0
             
             sf = SharedFolder(Settings().SharingFolderPath)
-            si = sf.GetSharedFileInfo(key)
-            message = "QueryHit|" + str(key) + "|" + str(Settings().GetAppNode().ToMessage()) + "&" + str(si.ToMessage())
+            fileList = sf.GetSharedFiles(key)
+            
+            message = "QueryHit|" + str(key) + "|" + str(Settings().GetAppNode().ToMessage()) + "&"
+            counter = 0
+            for si in filelist:
+                if (counter > 0):
+                    message = message + "|"
+                message = message + si.ToMessage()
+                counter = counter + 1
+            
             try:
                 while totalsent < len(message):
                     sent = s.send(message[totalsent:])
@@ -299,24 +309,26 @@ class Server(Thread):
         #host.Show()
         
         files = fileList.split('|')
-        si = SharedItem()
-        if (not si.SetFromMessage(fileList)):
-            return
-        fileName = si.Name()
-        fileSize = si.Size()
-        fileRelevance = si.Relevance()
-        #print "__HandleQueryHit, fileList: " + fileList
-        
-        di = DownloadItem()
-        di.SetKeyword(keyword)
-        di.SetFilename(fileName)
-        di.SetIp(host.ip)
-        di.SetPeer(host.id)
-        di.SetPort(host.fileSharePort)
-        di.SetId(random.randint(0, 200000))
-
-        dl = DownloadList()
-        dl.Add(di)
+        print fileList
+    
+        #si = SharedItem()
+        #if (not si.SetFromMessage(fileList)):
+        #    return
+        #fileName = si.Name()
+        #fileSize = si.Size()
+        #fileRelevance = si.Relevance()
+        ##print "__HandleQueryHit, fileList: " + fileList
+        #
+        #di = DownloadItem()
+        #di.SetKeyword(keyword)
+        #di.SetFilename(fileName)
+        #di.SetIp(host.ip)
+        #di.SetPeer(host.id)
+        #di.SetPort(host.fileSharePort)
+        #di.SetId(random.randint(0, 200000))
+        #
+        #dl = DownloadList()
+        #dl.Add(di)
         
         #print "\nFound '" + str(elements[1]) + "', at: '" + str(elements[2]) + "'"
         

@@ -1,9 +1,11 @@
+#!/usr/bin/env python
+
 from Node import Node
 from Settings import Settings
 class List:
-    filename = "list.snapster"
-    count=0
     def __init__(self):
+        self.filename = "list.snapster"
+        self.count = 0
         self.nodelist = []
         self.__ReadNodesFromFile()
     
@@ -15,7 +17,6 @@ class List:
                 if (readNode.SetNodeFromMessage(line)):
                     self.nodelist.append(readNode)
                     
-                        
     def GetNodes(self):
         self.__ReadNodesFromFile()
         return self.nodelist
@@ -27,6 +28,12 @@ class List:
             if (str(node.id) == guid):
                 return node
         return None
+    
+    def Contains(self, node):
+        for n in self.GetAll():
+            if(str(n.id) == str(node.id)):
+                return True
+        return False
     
     def ToMessage(self):
         nodesToSend = self.GetNodes()
@@ -82,8 +89,10 @@ class List:
         self.nodelist.append(node)
         self.__CheckForDuplicates()
         self.SaveNodes()
+    
     def Count(self):
         return len(self.nodelist)   
+    
     def __CheckForDuplicates(self):
         newList = []
         self.count=0
@@ -98,9 +107,10 @@ class List:
                 newList.append(n)
                 self.count=self.count+1
         self.nodelist = newList[:]
+    
     def Clear(self):
-        for n in self.GetNodes():
-            self.RemoveNodeFromList(n)
+        self.nodelist = []
+        self.SaveNodes()
     
 ##l = List()
 ##print l.ToMessage()

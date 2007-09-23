@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+
 #Class with information about a node
 import GUID
 class Node:

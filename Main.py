@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+
 import Node
 import time
 from Server import Server
@@ -7,7 +9,6 @@ from Settings import Settings
 from NeighbourList import NeighbourList
 from DownloadList import DownloadList
 from List import List
-
 
 s = Settings()
 print "This node is: " + s.GetAppNode().ToString()
