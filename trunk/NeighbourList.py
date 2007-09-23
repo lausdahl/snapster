@@ -21,7 +21,7 @@ class NeighbourList(List):
         self.RemoveNodeFromList(node)
     
     def IsFull(self):
-        return self.maxNeighbours > self.Count()
+        return int(self.maxNeighbours) < int(self.Count())
 
 
 #n = NeighbourList(3)
