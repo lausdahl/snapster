@@ -3,24 +3,23 @@
     <app>
         <MaxNeighbourCount>3</MaxNeighbourCount>
         <rediscovery_delay_ms>5000</rediscovery_delay_ms>
-        <port>800</port>
-        <id>Kenneth Server Test IDE</id>
-        <quality>5</quality>
+        <port>220</port>
+        <id>Claus</id>
+        <quality>10</quality>
         <ip>10.11.79.231</ip>
         <startServer>1</startServer>
         <startDiscovery>1</startDiscovery>
         <NumberOfKWalkers>3</NumberOfKWalkers>
-        <fileSharePort>400</fileSharePort>
+        <fileSharePort>897</fileSharePort>
         <sharingFolder>Files</sharingFolder>
         <downloadFolder>Downloads</downloadFolder>
     </app>  
     <bootstrap>
         <node>
-            <guid>Claus</guid>
-            <ip>172.22.185.73</ip>
-            <port>220</port>
+            <guid>Navn</guid>
+            <ip>IP</ip>
+            <port>200</port>
             <quality>10</quality>
         </node>
-  
     </bootstrap>
 </Snapster>

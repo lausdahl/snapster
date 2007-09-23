@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+
 import time
 import List
 from Settings import Settings
@@ -78,10 +80,9 @@ class Client(Thread):
         s.settimeout(10)
         #connect to node
         try:
-            #print "Query, Connecting to: " + str(reciever.ip) + ":" + str(reciever.port)
             s.connect((reciever.ip, reciever.port))
             totalsent = 0
-            message="Query|"+str(key)+"|"+str(Settings().Ttl)+"|"+str(Settings().GetAppNode().ToMessage())
+            message = "Query|" + str(key) + "|" + str(Settings().Ttl) + "|" + str(Settings().GetAppNode().ToMessage())
             try:
                 while totalsent < len(message):
                     sent = s.send(message[totalsent:])
@@ -95,7 +96,8 @@ class Client(Thread):
             print('ForwardQuery, Cannot connect to: ' + str(reciever.ip))
             
     def __FindKWalkers(self):
-        kwCount = Settings().NumberOfKWalkers
+        s = Settings()
+        kwCount = s.NumberOfKWalkers
         count = 0
         kWalker = []
         for n in NeighbourList().GetAll():
@@ -113,9 +115,7 @@ class Client(Thread):
         try:
             s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
             s.settimeout(10)
-            #print 'Download, connect ip: ' + str(di.GetIp()) + ' Port: ' + str(di.GetPort())
             s.connect((di.GetIp(), di.GetPort()))
-            #print 'connected'
             totalsent = 0
             message = "Download|" + di.GetFilename()
             
@@ -125,17 +125,22 @@ class Client(Thread):
                     if sent == 0:
                         raise RuntimeError, "socket connection broken"
                     totalsent = totalsent + sent
-                print 'Download request send on: ' + di.GetFilename()
+                #print 'Download request send on: ' + di.GetFilename()
             except socket.error:
                 print('__DownloadFile, Send failed')
+                return
             
             f = open(Settings().DownloadFolderPath + '\\' + di.GetFilename(),"wb")
+            print "\nBegin download of: " + di.GetFilename() + " (" + di.GetSize() + ")"
+            downloadad = 0
             while 1:
+                print di.GetFilename() + ": " + str((di.GetSize()/downloaded)*100) + " %"
                 data = s.recv(1024)
                 if not data: break
                 f.write(data)
+                downloaded = downloaded + data
             f.close()
-            print 'Download: ' + di.GetFilename()
+            print "Downloaded: " + di.GetFilename() + ", to: " + Settings().DownloadFolderPath
         except socket.error:
             print('__DownloadFile, Recieve failed')
 

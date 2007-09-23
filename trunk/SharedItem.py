@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+
 import os
 
 class SharedItem:
@@ -23,10 +24,10 @@ class SharedItem:
         return str(self.relevance)
     
     def ToMessage(self):
-        return str(self.name) + "|" + str(self.size) + "|" + str(self.relevance)
+        return str(self.name) + "#" + str(self.size) + "#" + str(self.relevance)
     
     def SetFromMessage(self, message):
-        elements = message.split('|')
+        elements = message.split('#')
         if (len(elements) == 3):
             self.name = elements[0]
             self.size = int(elements[1])

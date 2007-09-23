@@ -1,31 +1,31 @@
+#!/usr/bin/env python
+
 from Node import Node
-from List2 import List2
+from List import List
 from Settings import Settings
-class NeighbourList(List2):
-    #Max=10
+
+class NeighbourList(List):
     def __init__(self):
-        List2.filename="NeighbourList.snapster"
-        List2.__init__(self)
-        self.Max=Settings().MaxNeighbourCount
+        List.__init__(self)
+        List.filename = "NeighbourList.snapster"
+        self.maxNeighbours = Settings().MaxNeighbourCount
+    
     def GetAll(self):
         return self.GetNodes()
-    def Add(self,node):
-        if(self.count<self.Max):
+    
+    def Add(self, node):
+        if(not self.IsFull()):
             self.AddNode(node)
-    def Remove(self,node):
+    
+    def Remove(self, node):
         self.RemoveNodeFromList(node)
+    
     def IsFull(self):
-        return not (self.Max-self.count)
-    def Contains(self,node):
-        for n in self.GetAll():
-            if(n.id==node.id):
-                return True
-        return False
-    def Clear(self):
-        for n in self.GetAll():
-            self.Remove(n)
+        return self.maxNeighbours > self.count
 
 
+n = NeighbourList(3)
+n.Clear()
 
 #newNode = Node()
 #newNode.ip = "10.10.10.10"

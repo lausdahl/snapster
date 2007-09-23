@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+
 from xml.parsers import expat
 import xml.dom.minidom #defines a standard way for accessing and manipulating XML documents
 import pprint

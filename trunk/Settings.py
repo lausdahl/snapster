@@ -1,5 +1,8 @@
+#!/usr/bin/env python
+
 from XMLHandler import XMLHandler
 from Node import Node
+import os
 import sys
 import socket
 
@@ -20,8 +23,8 @@ class Settings:
         self.NumberOfKWalkers = int(s[8])
         self.fileSharePort = int(s[9])
         self.Ttl = 1
-        self.SharingFolderPath = sys.path[0] + '\\' + str(s[10])
-        self.DownloadFolderPath = sys.path[0] + '\\' + str(s[11])
+        self.SharingFolderPath = os.path.join(sys.path[0], str(s[10]))
+        self.DownloadFolderPath = os.path.join(sys.path[0], str(s[11]))
 
     def GetBootStrapNodes(self):
         return self.handler.ReadBootStrapNodes()
