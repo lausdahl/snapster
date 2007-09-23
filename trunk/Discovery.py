@@ -106,10 +106,10 @@ class Discovery(Thread):
             #test for full list
             if (self.neighbourList.IsFull()):
                 return
-            print "__FindNeighbours, We are not full"
             
-            self.__RequestToBeNeighbours(node)#):#we have room and handle agreement
-            #    self.neighbourList.Add(node)
+            #test if node is not already in neighbour list
+            if (not self.neighbourList.Contains(node)):
+                self.__RequestToBeNeighbours(node)#):#we have room and handle agreement
                 
     def __DropNode(self, node):
         self.neighbourList.Remove(node)
@@ -133,36 +133,36 @@ class Discovery(Thread):
         #ask the node if we can be neighbours
         totalsent = 0
         message = "Request|" + str(self.nodeMe.ToMessage())
+        #try:
+        s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        s.settimeout(5)
+        s.connect((node.ip, node.port))
+        print "__RequestToBeNeighbours, message: " + message
+        while totalsent < len(message):
+            sent = s.send(message[totalsent:])
+            if sent == 0:
+                raise RuntimeError, "socket connection broken"
+            totalsent = totalsent + sent
         try:
-            s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-            s.settimeout(5)
-            s.connect((node.ip, node.port))
-            print "__RequestToBeNeighbours, message: " + message
-            while totalsent < len(message):
-                sent = s.send(message[totalsent:])
-                if sent == 0:
-                    raise RuntimeError, "socket connection broken"
-                totalsent = totalsent + sent
-            try:
-                SIZE = 1024
-                data = s.recv(SIZE)
-                print "__RequestToBeNeighbours, Data: " + str(data)
-                elements = str(data).split('|')
-                if(elements[0] == "YES"):
-                    if(len(elements) < self.NODE_LENGTH):
-                        print "Error no guid recieved as a node"
-                    message=''
-                    for i in range(0,self.NODE_LENGTH):
-                        message=message+str(elements[i+1])+"|"
-            
-                    node = Node.Node()
-                    node.SetNodeFromMessage(message)
-                    self.neighbourList.Add(node)
-                    
-            except socket.error:
-                print('Recieve failed')
+            SIZE = 1024
+            data = s.recv(SIZE)
+            print "__RequestToBeNeighbours, Data: " + str(data)
+            elements = str(data).split('|')
+            if(elements[0] == "YES"):
+                if(len(elements) < self.NODE_LENGTH):
+                    print "Error no guid recieved as a node"
+                message=''
+                for i in range(0,self.NODE_LENGTH):
+                    message=message+str(elements[i+1])+"|"
+        
+                node = Node.Node()
+                node.SetNodeFromMessage(message)
+                self.neighbourList.Add(node)
+                
         except socket.error:
-            print 'Error in send __RequestToBeNeighbours'
+            print('Recieve failed')
+        #except socket.error:
+            #print 'Error in send __RequestToBeNeighbours'
         s.close()
     
     def __CheckNeighbours(self):
@@ -210,6 +210,10 @@ class Discovery(Thread):
                 returnValue = False
             s.close()
         except socket.error:
-            print('Check, Cannot connect to: ' + str(node.ip))
+            print('Check, Cannot connect to: ' + str(node.ip) + ':' + str(node.port))
             returnValue = False
         return returnValue
+    
+    
+    
+    

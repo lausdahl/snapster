@@ -62,7 +62,7 @@ class Server(Thread):
                 self.client, address = self.s.accept()
                 data = self.client.recv(size)
                 #print "Client connected from " + str(address)
-                print "__RecieveMessage, Message recieved: " + str(data)
+                #print "__RecieveMessage, Message recieved: " + str(data)
                 self.elements = str(data).split('|')
                 if (len(self.elements) == 0):
                     print "Unknown message: " + str(data)
@@ -106,7 +106,7 @@ class Server(Thread):
         newNode = Node.Node()
         if (not newNode.SetNodeFromMessage(message)):
             return
-        List.AddNode(newNode)
+        List().AddNode(newNode)
         
         totalsent = 0
         message = List().ToMessage()
