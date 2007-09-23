@@ -24,8 +24,8 @@ class NeighbourList(List):
         return self.maxNeighbours > self.count
 
 
-n = NeighbourList(3)
-n.Clear()
+#n = NeighbourList(3)
+#n.Clear()
 
 #newNode = Node()
 #newNode.ip = "10.10.10.10"

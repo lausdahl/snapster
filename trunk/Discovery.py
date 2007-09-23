@@ -162,7 +162,7 @@ class Discovery(Thread):
         for node in self.neighbourList.GetAll():
             if (self.stopRun == True):
                 return;
-            val=self.__CheckNeighbour(node)
+            val = self.__CheckNeighbour(node)
             if(not val):
                 #print "Deleting neighbour: " + str(node.ip)
                 self.neighbourList.Remove(node)
@@ -177,7 +177,7 @@ class Discovery(Thread):
             #print "Check, Connecting to: " + str(node.ip) + ":" + str(node.port)
             s.connect((node.ip, node.port))
             totalsent = 0
-            message="areYouAwake"
+            message = "areYouAwake"
             try:
                 while totalsent < len(message):
                     sent = s.send(message[totalsent:])

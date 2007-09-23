@@ -99,7 +99,7 @@ class List:
         for n in self.nodelist:
             foundNode = False
             for newNode in newList:
-                if (n.id == newNode.id):
+                if (n.id == newNode.id and n.modified > newNode.modified):
                     foundNode = True
                     newNode.numberOfNeighbours=n.numberOfNeighbours
                     break
