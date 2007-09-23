@@ -42,9 +42,9 @@ class Discovery(Thread):
         nodeList = Settings().GetBootStrapNodes()#self.list.GetNodes()
         self.list.Clear()
         for node in nodeList:
-            if (self.stopRun == True):
+            if (self.stopRun):
                 return
-            if (self.__Ping(node)):
+            if (not self.__Ping(node)):
                 self.list.AddNode(node)
         
     def __Ping(self, node=Node):
@@ -57,7 +57,7 @@ class Discovery(Thread):
             s.connect((node.ip, node.port))
             #print "Connected"
             totalsent = 0
-            message = "ping|" +str(self.nodeMe.ToMessage())
+            message = "ping|" + str(self.nodeMe.ToMessage())
             #print ('Ping, Client sending ping to ' + str(node.ip))
             try:
                 while totalsent < len(message):
@@ -68,16 +68,15 @@ class Discovery(Thread):
             except:
                 print('Ping, Send failed')
             try:
-                EOT = False
                 size = 1024
                 data = ""
-                while not EOT:
+                while 1:
                     chunk = s.recv(size)
-                    if (chunk == ''):
-                        EOT = True
+                    if (not chunk):
+                        break
                     data = data + chunk
                 if (len(str(data)) > 0):
-                    List.List().SetListFromMessage(data)
+                    List.List().SetListFromMessage(str(data))
                 returnValue = True
             except socket.error:
                 print('Ping, Recieve failed')
@@ -92,14 +91,19 @@ class Discovery(Thread):
         if (nodeList is None):
             return
         
+        print "__FindNeighbours, Finding neighbours"
         for node in nodeList:
-            if (self.stopRun == True):
-                return
-            
-            if (self.neighbourList.IsFull()):
+            print "__FindNeighbours, Asking node: " + node.ToString()
+            if (self.stopRun):
                 return
             
             #do wi want this node as a friend
+            
+            #test for full list
+            if (self.neighbourList.IsFull()):
+                return
+            print "__FindNeighbours, We are not full"
+            
             self.__RequestToBeNeighbours(node)#):#we have room and handle agreement
             #    self.neighbourList.Add(node)
                 
@@ -124,11 +128,12 @@ class Discovery(Thread):
     def __RequestToBeNeighbours(self, node):
         #ask the node if we can be neighbours
         totalsent = 0
-        message="Request|"+ str(self.nodeMe.ToMessage())
+        message = "Request|" + str(self.nodeMe.ToMessage())
         try:
             s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
             s.settimeout(5)
             s.connect((node.ip, node.port))
+            print "__RequestToBeNeighbours, message: " + message
             while totalsent < len(message):
                 sent = s.send(message[totalsent:])
                 if sent == 0:
@@ -137,7 +142,7 @@ class Discovery(Thread):
             try:
                 SIZE = 1024
                 data = s.recv(SIZE)
-                #print "Data: " + str(data)
+                print "__RequestToBeNeighbours, Data: " + str(data)
                 elements = str(data).split('|')
                 if(elements[0] == "YES"):
                     if(len(elements) < self.NODE_LENGTH):
@@ -158,7 +163,7 @@ class Discovery(Thread):
     
     def __CheckNeighbours(self):
         for node in self.neighbourList.GetAll():
-            if (self.stopRun == True):
+            if (self.stopRun):
                 return;
             val = self.__CheckNeighbour(node)
             if(not val):
