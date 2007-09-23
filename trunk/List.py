@@ -5,7 +5,6 @@ from Settings import Settings
 class List:
     def __init__(self):
         self.filename = "list.snapster"
-        self.count = 0
         self.nodelist = []
         self.__ReadNodesFromFile()
     
@@ -50,11 +49,9 @@ class List:
     def ToString(self):
         nodesToSend = self.GetNodes()
         message = ""
-        counter = 0
         for nodeToSend in nodesToSend:
             message += "\n"
             message += nodeToSend.ToMessage()
-            counter += 1
         return message
     
     def SetListFromMessage(self, message):
@@ -70,7 +67,7 @@ class List:
         file = open(self.filename, "w")
         s = Settings()
         for n in self.nodelist:
-            if(n.id==s.Id):
+            if(str(n.id) == str(s.Id)):
                 continue
             file.write(n.ToMessage())
             file.write("\n")
@@ -80,7 +77,7 @@ class List:
     def RemoveNodeFromList(self, node):
         newNodeList = []
         for tmpN in self.nodelist:
-            if (tmpN.id != node.id):
+            if (str(tmpN.id) != str(node.id)):
                 newNodeList.append(tmpN)
         self.nodelist = newNodeList[:]
         self.SaveNodes()
@@ -96,11 +93,10 @@ class List:
     
     def __CheckForDuplicates(self):
         newList = []
-        self.count=0
         for n in self.nodelist:
             foundNode = False
             for newNode in newList:
-                if (n.id == newNode.id and n.modified > newNode.modified):
+                if (str(n.id) == str(newNode.id) and n.modified > newNode.modified):
                     foundNode = True
                     newNode.numberOfNeighbours=n.numberOfNeighbours
                     break
