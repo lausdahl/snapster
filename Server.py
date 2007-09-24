@@ -159,22 +159,7 @@ class Server(Thread):
                     
             if(nodeToDrop.quality > 0 and
                (nodeWithMaxQuality.quality < newNode.quality or self.neighbourList.count > newNode.numberOfNeighbours)):
-                dropSocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-                try:
-                    dropSocket.connect((nodeToDrop.ip, nodeToDrop.port))
-                    totalsent = 0
-                    message = "Drop|" + str(self.currentNode.ToMessage())
-                    try:
-                        while totalsent < len(message):
-                            sent = dropSocket.send(message[totalsent:])
-                            if sent == 0:
-                                raise RuntimeError, "socket connection broken"
-                            totalsent = totalsent + sent
-                        dropSocket.close()
-                    except socket.error:
-                        print('Error in dropsocket in send')
-                except socket.error:
-                    print('Error in drop socket')
+                self.DropNode(nodeToDrop)
                 self.neighbourList.Remove(nodeToDrop)
                 self.neighbourList.Add(newNode)
                 #print "__HandleNeighbourRequest, Added new friend: " + str(newNode.ip) + " in stead of: " + str(nodeToDrop.ip)
@@ -184,6 +169,25 @@ class Server(Thread):
             self.client.send("YES|" + str(self.currentNode.ToMessage()))
         else:
             self.client.send("NO")
+            
+    def DropNode(self, nodeToDrop):
+        if (nodeToDrop is None):
+            return
+        
+        dropSocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        try:
+            dropSocket.connect((nodeToDrop.ip, nodeToDrop.port))
+            totalsent = 0
+            message = "Drop|" + str(self.currentNode.ToMessage())
+            while totalsent < len(message):
+                sent = dropSocket.send(message[totalsent:])
+                if sent == 0:
+                    break#raise RuntimeError, "socket connection broken"
+                totalsent = totalsent + sent
+            dropSocket.close()
+        except socket.error:
+            pass
+            #print('Error in drop socket')
 
     def __HandleNeighbourDrop(self):
         self.neighbourList = NeighbourList.NeighbourList()
@@ -213,6 +217,8 @@ class Server(Thread):
     def __HandleQuery(self):
         if(len(self.elements)<self.NODE_LENGTH):
             print "Error no guid recieved as a node"
+            return
+        
         message = ''
         key = str(self.elements[1])
         Ttl = int(self.elements[2])-1
@@ -233,13 +239,13 @@ class Server(Thread):
         path = s.SharingFolderPath
         sharedFolder = SharedFolder(path)
         if(sharedFolder.Contains(key)):
-            print "\nFound query locally, sending query hit"
+            #print "\nFound query locally, sending query hit"
             self.__SendQueryHit(key, queryRequestNode)
         if(Ttl >= 0):
             self.__ForwardQuery(message, queryRequestNode)
         
     def __SendQueryHit(self, key, reciever):
-        print "\nSending queryHit on '" + key + "', to '" + str(reciever.ip) + "'"
+        #print "\nSending queryHit on '" + key + "', to '" + str(reciever.ip) + "'"
         s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         s.settimeout(10)
         #connect to node
@@ -258,7 +264,7 @@ class Server(Thread):
                     message = message + "|"
                 message = message + si.ToMessage()
                 counter = counter + 1
-            print "__SendQueryHit, message: " + message
+            #print "__SendQueryHit, message: " + message
             
             try:
                 while totalsent < len(message):
@@ -267,9 +273,11 @@ class Server(Thread):
                         raise RuntimeError, "socket connection broken"
                     totalsent = totalsent + sent
             except socket.error:
-                print('__SendQueryHit, Send failed')
+                pass
+                #print('__SendQueryHit, Send failed')
         except socket.error:
-            print('__SendQueryHit, Cannot connect to: ' + str(reciever.ip))
+            pass
+            #print('__SendQueryHit, Cannot connect to: ' + str(reciever.ip))
         s.close()
             
     def __ForwardQuery(self, message, senderNode):

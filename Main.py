@@ -37,6 +37,7 @@ if(s.StartServer):
 #clear neighbour list, by moving them to global list
 for n in NeighbourList().GetAll():
     List().AddNode(n)
+    server.DropNode(n)
 NeighbourList().Clear()
 
 # Clear downloadlist

@@ -132,15 +132,27 @@ class Client(Thread):
                 os.remove(filePath)
 
             f = open(filePath,"wb")
-            print "__DownloadFile, f: " + str(f)
-            print "\nBegin download of: " + str(di.GetFilename()) + " (" + str(di.GetSize()) + ")"
+            #print "__DownloadFile, f: " + str(f)
+            print "\nBegin download of: " + str(di.GetFilename()) + " (" + str(di.GetSize()) + " bytes)"
             downloaded = 0
+            percentage = 0
+            lastPercentage = 0
+            lastTime = time.time()
             while 1:
-                print di.GetFilename() + ": " + str(downloaded/(di.GetSize())*100) + " %"
+                #print "LastTime: " + str(lastTime) + ", time: " + str(time.time())
+                #if (percentage > float(lastPercentage + 10)): #only print with 10% intervals
+                if (lastTime + 2 < time.time()): #print progress every 2 seconds
+                    percentage = float(downloaded)/float(di.GetSize()) * 100
+                    print di.GetFilename() + ": " + str(percentage) + " %"
+                    lastPercentage = percentage
+                    lastTime = time.time()
                 data = s.recv(1024)
-                if not data: break
+                if not data:
+                    break
                 f.write(data)
-                downloaded = downloaded + data
+                downloaded = downloaded + len(data)
+                #print "__DownloadFile, data: " + data
+                #print "__DownloadFile, downloaded: " + str(downloaded)
             f.close()
             print "Downloaded: " + di.GetFilename() + ", to: " + Settings().DownloadFolderPath
         except socket.error:
