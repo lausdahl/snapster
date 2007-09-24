@@ -10,7 +10,8 @@ from threading import Thread
 from Settings import Settings
 
 class Discovery(Thread):
-    NODE_LENGTH=6
+    NODE_LENGTH = 6
+    
     def __init__(self,node=None):
         Thread.__init__(self)
         self.stopRun = False
@@ -67,9 +68,7 @@ class Discovery(Thread):
                     if sent == 0:
                         raise RuntimeError, "socket connection broken"
                     totalsent = totalsent + sent
-            except:
-                print('Ping, Send failed')
-            try:
+                
                 size = 1024
                 data = ""
                 while 1:
@@ -81,11 +80,11 @@ class Discovery(Thread):
                     List.List().SetListFromMessage(str(data))
                 returnValue = True
             except socket.error:
-                print('Ping, Recieve failed')
+                #print('Ping, Recieve failed')
                 returnValue = False
             s.close()
         except socket.error:
-            print('Ping, Cannot connect')
+            #print('Ping, Cannot connect')
             returnValue = False
         return returnValue
     
@@ -97,7 +96,6 @@ class Discovery(Thread):
         
         #print "__FindNeighbours, Finding neighbours"
         for node in nodeList:
-            #print "__FindNeighbours, Asking node: " + node.ToString()
             if (self.stopRun):
                 return
             
@@ -114,7 +112,7 @@ class Discovery(Thread):
     def __DropNode(self, node):
         self.neighbourList.Remove(node)
         totalsent = 0
-        message="Drop|"+ str(node.ToMessage())
+        message = "Drop|" + str(node.ToMessage())
         try:
             s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
             s.settimeout(5)
@@ -160,7 +158,8 @@ class Discovery(Thread):
                     self.neighbourList.Add(node)
                     
             except socket.error:
-                print('Recieve failed')
+                pass
+                #print('Recieve failed')
         except socket.error:
             pass
             #print 'Error in send __RequestToBeNeighbours'
@@ -179,7 +178,7 @@ class Discovery(Thread):
         returnValue = False
         #create an INET, STREAMing socket
         s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        s.settimeout(10)
+        s.settimeout(5)
         #connect to node
         try:
             #print "Check, Connecting to: " + str(node.ip) + ":" + str(node.port)
@@ -193,7 +192,8 @@ class Discovery(Thread):
                         raise RuntimeError, "socket connection broken"
                     totalsent = totalsent + sent
             except socket.error:
-                print('Check, Send faild')
+                pass
+                #print('Check, Send failed')
             try:
                 SIZE = 1024
                 data = s.recv(SIZE)
@@ -207,11 +207,11 @@ class Discovery(Thread):
                 else:
                     returnValue = False
             except socket.error:
-                print('Check, Recieve failed')
+                #print('Check, Recieve failed')
                 returnValue = False
             s.close()
         except socket.error:
-            print('Check, Cannot connect to: ' + str(node.ip) + ':' + str(node.port))
+            #print('Check, Cannot connect to: ' + str(node.ip) + ':' + str(node.port))
             returnValue = False
         return returnValue
     

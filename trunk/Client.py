@@ -7,6 +7,7 @@ from NeighbourList import NeighbourList
 from threading import Thread
 from DownloadList import DownloadList
 import socket
+import os
 
 class Client(Thread):
     def __init__(self):
@@ -26,8 +27,8 @@ class Client(Thread):
         print "'p' - Shows your total list of peers"
         print "'n' - Show your list of neighbours"
         print "'l' - Show list of available search results"
-        print "'d ##' - will download file number ## from list (i.e.: d 12, would download item 12 from list)"
         print "'c' - Clear list of available search results"
+        print "'d ##' - will download file number ## from list (i.e.: d 12, would download item 12 from list)"
         print "'s keywords' - Search (i.e.: s Britney Spears, would search for 'Britney Spears')"
         print "'q' - Quits this program"
         print "Remember, press 'enter' at any time to view this message again!"
@@ -110,6 +111,7 @@ class Client(Thread):
         dl = DownloadList()
         di = dl.GetDownloadItemFromId(item)
         if (di is None):
+            print "\nCould not find requested file to download, please try again."
             return
           
         try:
@@ -119,22 +121,22 @@ class Client(Thread):
             totalsent = 0
             message = "Download|" + di.GetFilename()
             
-            try:
-                while totalsent < len(message):
-                    sent = s.send(message[totalsent:])
-                    if sent == 0:
-                        raise RuntimeError, "socket connection broken"
-                    totalsent = totalsent + sent
-                #print 'Download request send on: ' + di.GetFilename()
-            except socket.error:
-                print('__DownloadFile, Send failed')
-                return
-            
-            f = open(Settings().DownloadFolderPath + '\\' + di.GetFilename(),"wb")
-            print "\nBegin download of: " + di.GetFilename() + " (" + di.GetSize() + ")"
-            downloadad = 0
+            while totalsent < len(message):
+                sent = s.send(message[totalsent:])
+                if sent == 0:
+                    raise RuntimeError, "socket connection broken"
+                totalsent = totalsent + sent
+
+            filePath = Settings().DownloadFolderPath + '\\' + di.GetFilename()
+            if (os.path.exists(filePath)):
+                os.remove(filePath)
+
+            f = open(filePath,"wb")
+            print "__DownloadFile, f: " + str(f)
+            print "\nBegin download of: " + str(di.GetFilename()) + " (" + str(di.GetSize()) + ")"
+            downloaded = 0
             while 1:
-                print di.GetFilename() + ": " + str((di.GetSize()/downloaded)*100) + " %"
+                print di.GetFilename() + ": " + str(downloaded/(di.GetSize())*100) + " %"
                 data = s.recv(1024)
                 if not data: break
                 f.write(data)

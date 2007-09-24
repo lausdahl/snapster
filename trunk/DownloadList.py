@@ -56,7 +56,7 @@ class DownloadList:
     def GetDownloadItemFromId(self, id):
         self.__ReadList()
         for di in self.downloadList:
-            if (di.GetId() == id):
+            if (str(di.GetId()) == str(id)):
                 return di
         return None
         
