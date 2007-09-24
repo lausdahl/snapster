@@ -5,8 +5,8 @@
         <rediscovery_delay_ms>5000</rediscovery_delay_ms>
         <port>220</port>
         <id>Claus</id>
-        <quality>10</quality>
-        <ip>10.11.79.231</ip>
+        <quality>8</quality>
+        <ip>172.16.0.114</ip>
         <startServer>1</startServer>
         <startDiscovery>1</startDiscovery>
         <NumberOfKWalkers>3</NumberOfKWalkers>
@@ -16,9 +16,9 @@
     </app>  
     <bootstrap>
         <node>
-            <guid>Navn</guid>
-            <ip>IP</ip>
-            <port>200</port>
+            <guid>Stationary</guid>
+            <ip>172.16.0.102</ip>
+            <port>240</port>
             <quality>10</quality>
         </node>
     </bootstrap>
