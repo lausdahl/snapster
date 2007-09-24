@@ -146,7 +146,7 @@ class Discovery(Thread):
             try:
                 SIZE = 1024
                 data = s.recv(SIZE)
-                print "__RequestToBeNeighbours, Data: " + str(data)
+                #print "__RequestToBeNeighbours, Data: " + str(data)
                 elements = str(data).split('|')
                 if(elements[0] == "YES"):
                     if(len(elements) < self.NODE_LENGTH):

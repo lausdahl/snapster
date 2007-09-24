@@ -253,11 +253,12 @@ class Server(Thread):
             
             message = "QueryHit|" + str(key) + "|" + str(Settings().GetAppNode().ToMessage()) + "&"
             counter = 0
-            for si in filelist:
+            for si in fileList:
                 if (counter > 0):
                     message = message + "|"
                 message = message + si.ToMessage()
                 counter = counter + 1
+            print "__SendQueryHit, message: " + message
             
             try:
                 while totalsent < len(message):
