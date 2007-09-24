@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Komodo Project File - DO NOT EDIT -->
 <project id="c0323888-4e1c-4172-998d-b43088f19b11" name="Snapstor.kpf" kpf_version="4">
-<preference-set idref="c0323888-4e1c-4172-998d-b43088f19b11/DownloadList.py">
+<preference-set idref="c0323888-4e1c-4172-998d-b43088f19b11/SharedFolder.py">
   <string id="lastInvocation">default</string>
 <preference-set id="Invocations">
 <preference-set id="default">
   <string id="postparams"></string>
-  <string id="userEnvironment"></string>
   <string id="language">Python</string>
   <string id="getparams"></string>
   <boolean id="use-console">0</boolean>
+  <string relative="path" id="filename">SharedFolder.py</string>
   <string id="mpostparams"></string>
   <boolean id="show-dialog">1</boolean>
   <string id="request-method">GET</string>
@@ -18,7 +18,31 @@
   <string id="posttype">application/x-www-form-urlencoded</string>
   <string id="documentRoot"></string>
   <string id="cookieparams"></string>
+  <string id="userEnvironment"></string>
+  <boolean id="sim-cgi">0</boolean>
+  <string id="cwd"></string>
+  <string id="userCGIEnvironment"></string>
+</preference-set>
+</preference-set>
+</preference-set>
+<preference-set idref="c0323888-4e1c-4172-998d-b43088f19b11/DownloadList.py">
+  <string id="lastInvocation">default</string>
+<preference-set id="Invocations">
+<preference-set id="default">
+  <string id="postparams"></string>
+  <string id="language">Python</string>
+  <string id="getparams"></string>
+  <boolean id="use-console">0</boolean>
   <string relative="path" id="filename">DownloadList.py</string>
+  <string id="mpostparams"></string>
+  <boolean id="show-dialog">1</boolean>
+  <string id="request-method">GET</string>
+  <string id="params"></string>
+  <string id="executable-params"></string>
+  <string id="posttype">application/x-www-form-urlencoded</string>
+  <string id="documentRoot"></string>
+  <string id="cookieparams"></string>
+  <string id="userEnvironment"></string>
   <boolean id="sim-cgi">0</boolean>
   <string id="cwd"></string>
   <string id="userCGIEnvironment"></string>
@@ -30,19 +54,19 @@
 <preference-set id="Invocations">
 <preference-set id="default">
   <string id="postparams"></string>
+  <string id="userEnvironment"></string>
   <string id="language">Python</string>
   <string id="getparams"></string>
-  <boolean id="show-dialog">1</boolean>
   <boolean id="use-console">0</boolean>
   <string id="mpostparams"></string>
-  <string relative="path" id="filename">DownloadItem.py</string>
+  <boolean id="show-dialog">1</boolean>
   <string id="request-method">GET</string>
   <string id="params"></string>
   <string id="executable-params"></string>
   <string id="posttype">application/x-www-form-urlencoded</string>
   <string id="documentRoot"></string>
   <string id="cookieparams"></string>
-  <string id="userEnvironment"></string>
+  <string relative="path" id="filename">DownloadItem.py</string>
   <boolean id="sim-cgi">0</boolean>
   <string id="cwd"></string>
   <string id="userCGIEnvironment"></string>
@@ -54,9 +78,9 @@
 <preference-set id="Invocations">
 <preference-set id="default">
   <string id="postparams"></string>
-  <string id="userEnvironment"></string>
   <string id="language">Python</string>
   <string id="getparams"></string>
+  <boolean id="show-dialog">1</boolean>
   <boolean id="use-console">0</boolean>
   <string id="mpostparams"></string>
   <string relative="path" id="filename">Server.py</string>
@@ -66,7 +90,7 @@
   <string id="posttype">application/x-www-form-urlencoded</string>
   <string id="documentRoot"></string>
   <string id="cookieparams"></string>
-  <boolean id="show-dialog">1</boolean>
+  <string id="userEnvironment"></string>
   <boolean id="sim-cgi">0</boolean>
   <string id="cwd"></string>
   <string id="userCGIEnvironment"></string>
@@ -78,10 +102,10 @@
 <preference-set id="Invocations">
 <preference-set id="default">
   <string id="postparams"></string>
-  <string id="userEnvironment"></string>
   <string id="language">Python</string>
   <string id="getparams"></string>
   <boolean id="use-console">0</boolean>
+  <string relative="path" id="filename">Main.py</string>
   <string id="mpostparams"></string>
   <boolean id="show-dialog">1</boolean>
   <string id="request-method">GET</string>
@@ -90,7 +114,7 @@
   <string id="posttype">application/x-www-form-urlencoded</string>
   <string id="documentRoot"></string>
   <string id="cookieparams"></string>
-  <string relative="path" id="filename">Main.py</string>
+  <string id="userEnvironment"></string>
   <boolean id="sim-cgi">0</boolean>
   <string id="cwd"></string>
   <string id="userCGIEnvironment"></string>
@@ -102,19 +126,19 @@
 <preference-set id="Invocations">
 <preference-set id="default">
   <string id="postparams"></string>
+  <string id="userEnvironment"></string>
   <string id="language">Python</string>
   <string id="getparams"></string>
-  <boolean id="show-dialog">1</boolean>
   <boolean id="use-console">0</boolean>
   <string id="mpostparams"></string>
-  <string relative="path" id="filename">MainHelp.py</string>
+  <boolean id="show-dialog">1</boolean>
   <string id="request-method">GET</string>
   <string id="params"></string>
   <string id="executable-params"></string>
   <string id="posttype">application/x-www-form-urlencoded</string>
   <string id="documentRoot"></string>
   <string id="cookieparams"></string>
-  <string id="userEnvironment"></string>
+  <string relative="path" id="filename">MainHelp.py</string>
   <boolean id="sim-cgi">0</boolean>
   <string id="cwd"></string>
   <string id="userCGIEnvironment"></string>
@@ -126,9 +150,9 @@
 <preference-set id="Invocations">
 <preference-set id="default">
   <string id="postparams"></string>
-  <string id="userEnvironment"></string>
   <string id="language">Python</string>
   <string id="getparams"></string>
+  <boolean id="show-dialog">1</boolean>
   <boolean id="use-console">0</boolean>
   <string id="mpostparams"></string>
   <string relative="path" id="filename">Discovery.py</string>
@@ -138,21 +162,24 @@
   <string id="posttype">application/x-www-form-urlencoded</string>
   <string id="documentRoot"></string>
   <string id="cookieparams"></string>
-  <boolean id="show-dialog">1</boolean>
+  <string id="userEnvironment"></string>
   <boolean id="sim-cgi">0</boolean>
   <string id="cwd"></string>
   <string id="userCGIEnvironment"></string>
 </preference-set>
 </preference-set>
 </preference-set>
+<preference-set idref="c0323888-4e1c-4172-998d-b43088f19b11">
+  <boolean id="import_live">1</boolean>
+</preference-set>
 <preference-set idref="c0323888-4e1c-4172-998d-b43088f19b11/XMLSettingsHandler.py">
   <string id="lastInvocation">default</string>
 <preference-set id="Invocations">
 <preference-set id="default">
   <string id="postparams"></string>
-  <string id="userEnvironment"></string>
   <string id="language">Python</string>
   <string id="getparams"></string>
+  <boolean id="show-dialog">1</boolean>
   <boolean id="use-console">0</boolean>
   <string id="mpostparams"></string>
   <string relative="path" id="filename">XMLSettingsHandler.py</string>
@@ -162,14 +189,11 @@
   <string id="posttype">application/x-www-form-urlencoded</string>
   <string id="documentRoot"></string>
   <string id="cookieparams"></string>
-  <boolean id="show-dialog">1</boolean>
+  <string id="userEnvironment"></string>
   <boolean id="sim-cgi">0</boolean>
   <string id="cwd"></string>
   <string id="userCGIEnvironment"></string>
 </preference-set>
 </preference-set>
-</preference-set>
-<preference-set idref="c0323888-4e1c-4172-998d-b43088f19b11">
-  <boolean id="import_live">1</boolean>
 </preference-set>
 </project>
