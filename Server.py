@@ -326,29 +326,24 @@ class Server(Thread):
         #host.Show()
         
         files = fileList.split('|')
-        print fileList
+        #print "__HandleQueryHit, Filelist: " + str(fileList)
+        #print "__HandleQueryHit, Files: " + str(files)
+        
+        dl = DownloadList()
+        for file in files:
+            si = SharedItem()
+            si.SetFromMessage(file)
+            di = DownloadItem()
+            di.SetKeyword(keyword)
+            di.SetFilename(si.Name())
+            di.SetRelevance(si.Relevance())
+            di.SetSize(si.Size())
+            di.SetIp(host.ip)
+            di.SetPeer(host.id)
+            di.SetPort(host.fileSharePort)
+            di.SetId(random.randint(0, 20000))
+            dl.Add(di)
     
-        #si = SharedItem()
-        #if (not si.SetFromMessage(fileList)):
-        #    return
-        #fileName = si.Name()
-        #fileSize = si.Size()
-        #fileRelevance = si.Relevance()
-        ##print "__HandleQueryHit, fileList: " + fileList
-        #
-        #di = DownloadItem()
-        #di.SetKeyword(keyword)
-        #di.SetFilename(fileName)
-        #di.SetIp(host.ip)
-        #di.SetPeer(host.id)
-        #di.SetPort(host.fileSharePort)
-        #di.SetId(random.randint(0, 200000))
-        #
-        #dl = DownloadList()
-        #dl.Add(di)
-        
-        #print "\nFound '" + str(elements[1]) + "', at: '" + str(elements[2]) + "'"
-        
         
         
         

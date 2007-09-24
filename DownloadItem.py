@@ -60,7 +60,7 @@ class DownloadItem:
         return self.relevance
         
     def Print(self):
-        print "|" + str(self.id) + "\t" + str(self.relevance) + "\t|" + self.keyword + "\t|" + self.filename + "\t|" + str(self.size) + "\t|" + self.peer
+        print "|" + str(self.id) + "\t|" + str(self.relevance) + "\t|" + self.keyword + "\t|" + self.filename + "\t|" + str(self.size) + "(b)\t|" + self.peer
         
     def ToMessage(self):
         return str(self.id) + "|" + str(self.keyword) + "|" + str(self.filename) + "|" + str(self.size) + "|" + str(self.relevance) + "|" + str(self.ip) + "|" + str(self.port) + "|" + str(self.peer)

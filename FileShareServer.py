@@ -74,13 +74,14 @@ class FileShareServer(Thread):
         file = Settings().SharingFolderPath + "\\" + fileName
         if (os.path.exists(file)):
             f = open(file, "rb")
-            while 1:
-                data = f.read(1024)
-                if (len(data) > 0):
-                    sent = s.send(data[totalsent:])
-                    if sent == 0:
-                        break
-                else:
-                    break
+            data = f.read()
+            #while 1:
+            #    data = f.read(1024)
+            #    if (len(data) > 0):
+            #        sent = s.send(data[totalsent:])
+            #        if sent == 0:
+            #            break
+            #    else:
+            #        break
             f.close()
             self.client.send(data)
