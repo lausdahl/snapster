@@ -110,7 +110,7 @@ class Server(Thread):
         
         totalsent = 0
         message = List().ToMessage()
-        print "__HandlePing, Answering with: " + str(message)
+        #print "__HandlePing, Answering with: " + str(message)
         try:
             while totalsent < len(message):
                 sent = self.client.send(message[totalsent:])
@@ -124,6 +124,7 @@ class Server(Thread):
     def __HandleNeighbourRequest(self):
         if(len(self.elements) < self.NODE_LENGTH):
             print "Error no guid recieved as a node"
+            return
 
         message = ""
         for i in range(0,self.NODE_LENGTH):
@@ -188,6 +189,8 @@ class Server(Thread):
         self.neighbourList = NeighbourList.NeighbourList()
         if(len(self.elements) < self.NODE_LENGTH):
             print "Error no guid recieved as a node"
+            return
+        
         message=''
         for i in range(0,self.NODE_LENGTH):
             message=message+str(self.elements[i+1])+"|"
