@@ -26,7 +26,7 @@ class SharedFolder:
     #NOTE: the filenames are used as keys, hence identical filenames although in different folders will be skipped
     def __collectInfo(self,arg,curdir,flst):
         for name in flst:
-            qualifiedname = str(curdir + "\\" + name)
+            qualifiedname = str(curdir + "/" + name)
             lowcasename = (str(name)).lower()
             if os.path.isfile(qualifiedname):
                 if self.mapping.has_key(lowcasename):

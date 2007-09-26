@@ -3,6 +3,7 @@
 #Class with information about a node
 import GUID
 import time
+import traceback
 
 class Node:
     #def __init__(self):
@@ -52,8 +53,9 @@ class Node:
             else:
                 self.fileSharePort =0
             return True
-        except:
-            print "Fejl i node parsing"
+        except Exception, msg:
+            print "Fejl i node parsing, msg: " + str(msg) + ", message: " + message
+	    print_stack()
             #pass
 
 #node= Node()

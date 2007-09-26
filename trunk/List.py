@@ -2,6 +2,8 @@
 
 from Node import Node
 from Settings import Settings
+import NeighbourList
+
 class List:
     def __init__(self):
         self.filename = "list.snapster"
@@ -30,7 +32,7 @@ class List:
         return None
     
     def Contains(self, node):
-        for n in self.GetAll():
+        for n in self.GetNodes():
             if(str(n.id) == str(node.id)):
                 return True
         return False
@@ -47,19 +49,26 @@ class List:
         return message
     
     def ToString(self):
-        nodesToSend = self.GetNodes()
-        message = ""
-        for nodeToSend in nodesToSend:
+        nodes = self.GetNodes()
+        message = "\n|Name\t|Ip\t|Port\t|#Friends"
+	if (len(nodes) == 0):
+	    message += "\n|Empty list"
+        for node in nodes:
             message += "\n"
-            message += nodeToSend.ToMessage()
+            message += "|" + node.id + "\t|" + node.ip + "\t|" + str(node.port) + "\t|" + str(node.numberOfNeighbours)
         return message
     
     def SetListFromMessage(self, message):
+	self.__ReadNodesFromFile()
         nodesFromMessage = message.split(";")
         for s in nodesFromMessage:
             nodeFromMessage = Node()
-            nodeFromMessage.SetNodeFromMessage(s)
-            self.nodelist.append(nodeFromMessage)
+            if (nodeFromMessage.SetNodeFromMessage(s)):
+		#print "SetListFromMessage, Adding node to list: " + nodeFromMessage.ip
+                self.nodelist.append(nodeFromMessage)
+	    else:
+		print "SetListFromMessage, Kunne ikke parse en node på strengen s: " + str(s)
+		print "SetListFromMessage, Indkommen message: " + str(message)
         self.__CheckForDuplicates()
         self.SaveNodes()
     
@@ -67,14 +76,18 @@ class List:
         file = open(self.filename, "w")
         s = Settings()
         for n in self.nodelist:
+	    #print "SaveNodes, testing node: " + n.id + " (" + n.ip + ")"
             if(str(n.id) == str(s.Id)):
+		#print "SaveNodes, mig selv"
                 continue
+	    #print "SaveNodes, tilføjes til filen"
             file.write(n.ToMessage())
             file.write("\n")
         file.write("\n")
         file.close()
         
     def RemoveNodeFromList(self, node):
+	self.__ReadNodesFromFile()
         newNodeList = []
         for tmpN in self.nodelist:
             if (str(tmpN.id) != str(node.id)):
@@ -84,6 +97,7 @@ class List:
         
     def AddNode(self, node):
         #print "List-AddNode, Adding node to list: " + self.filename
+	self.__ReadNodesFromFile()
         self.nodelist.append(node)
         self.__CheckForDuplicates()
         self.SaveNodes()
@@ -103,6 +117,7 @@ class List:
                     break
             if (not foundNode):
                 newList.append(n)
+	#print "__CheckForDuplicates, New List: " + str(newList)
         self.nodelist = newList[:]
     
     def Clear(self):

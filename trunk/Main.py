@@ -24,21 +24,25 @@ if(s.StartDiscovery):
 
 client = Client()
 client.run()
-print "Client quitting"
+print "Client quitting, so stopping Snapster:"
 
 if(s.StartDiscovery):
-    print "Stopping discovery"
+    print "Stopping discovery.."
     discover.Stop()
 if(s.StartServer):
-    print "Stopping server"
+    print "Stopping server..."
     server.StopServer()
 
 #saving state
 #clear neighbour list, by moving them to global list
+print "Letting neighbours know i'm going down..."
+list = List()
 for n in NeighbourList().GetAll():
-    List().AddNode(n)
-    server.DropNode(n)
+    list.AddNode(n)
+    if (s.StartServer):
+	server.DropNode(n)
 NeighbourList().Clear()
+print "Neighbour reporting done..."
 
 # Clear downloadlist
 dL = DownloadList()
@@ -57,4 +61,4 @@ if(s.StartServer):
         print "Waiting " + str(timeout) + " second(s) for server to end..."
         time.sleep(timeout)
 
-print "Snapster has ended"
+print "Snapster has ended."

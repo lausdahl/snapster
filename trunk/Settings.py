@@ -10,9 +10,9 @@ class Settings:
     rediscovery_delay_ms = 0
     
     def __init__(self):
-        self.handler = XMLHandler("Settings.xml")
+        self.handler = XMLHandler("settings.xml")
         s = self.handler.ReadAppSettings()
-        self.MaxNeighbourCount = int(s[0])
+        self.MaxNeighbourCount = int(s[5])
         self.StartServer = int(s[6])
         self.StartDiscovery = int(s[7])
         self.Port = s[4]
@@ -22,9 +22,9 @@ class Settings:
         self.ip = s[2]
         self.NumberOfKWalkers = int(s[8])
         self.fileSharePort = int(s[9])
-        self.Ttl = 1
+        self.Ttl = 3
         self.SharingFolderPath = os.path.join(sys.path[0], str(s[10]))
-        self.DownloadFolderPath = os.path.join(sys.path[0], str(s[11]))
+        self.DownloadFolderPath = os.path.join(sys.path[0], str(s[10]))
 
     def GetBootStrapNodes(self):
         return self.handler.ReadBootStrapNodes()

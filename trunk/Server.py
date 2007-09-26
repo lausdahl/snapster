@@ -25,6 +25,7 @@ class Server(Thread):
         self.terminateServer = 0
         self.s = None
         self.client = None
+	self.list = List()
         self.neighbourList = NeighbourList.NeighbourList()
         self.elements = None
         self.FileServer = None
@@ -38,6 +39,7 @@ class Server(Thread):
     def StopServer(self):
         self.terminateServer = 1
         self.FileServer.StopServer()
+	self.FileServer.join()
         
         if (self.s is not None):
             self.s.close()
@@ -83,15 +85,20 @@ class Server(Thread):
                     else:
                         self.__HandleUnknownMessage(message)
                 self.client.close()
-            else:
-                resetSocket = True
             
             if (resetSocket):
                 self.s.close()
                 self.s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
                 self.s.bind(('', self.currentNode.port))
                 self.s.listen(backlog)
+	#print "Closing socket in server"
+	try:
+	    self.client.close()
+	    self.s.shutdown(2)
+	except:
+	    pass
         self.s.close()
+	#print "Server: socket: " + str(self.s)
         print "Server stopped"
                 
     def __HandlePing(self):
@@ -109,7 +116,15 @@ class Server(Thread):
         List().AddNode(newNode)
         
         totalsent = 0
-        message = List().ToMessage()
+	neighbourMessage = self.neighbourList.ToMessage()
+	listMessage = self.list.ToMessage()
+	message = ""
+        if (len(listMessage) > 0):
+		message = listMessage
+	if (len(neighbourMessage) > 0):
+		if (len(message) > 0):
+			message += ";"
+		message += neighbourMessage
         #print "__HandlePing, Answering with: " + str(message)
         try:
             while totalsent < len(message):
@@ -118,7 +133,8 @@ class Server(Thread):
                     raise RuntimeError, "socket connection broken"
                 totalsent = totalsent + sent
         except socket.error:
-            print('Send failed')
+            #print('Send failed')
+	    pass
         self.client.close()
             
     def __HandleNeighbourRequest(self):
@@ -150,7 +166,7 @@ class Server(Thread):
             nodeToDrop = Node.Node()
             nodeToDrop.quality = 0
             nodeWithMaxQuality = Node.Node()
-            nodeWithMaxQuality = 0
+            nodeWithMaxQuality.quality = 0
             for node in self.neighbourList.GetAll():
                 if (node.quality >= newNode.quality and node.quality > nodeToDrop.quality):
                     nodeToDrop = node
@@ -158,13 +174,14 @@ class Server(Thread):
                     nodeWithMaxQuality = node
                     
             if(nodeToDrop.quality > 0 and
-               (nodeWithMaxQuality.quality < newNode.quality or self.neighbourList.count > newNode.numberOfNeighbours)):
+               (nodeWithMaxQuality.quality < newNode.quality or self.neighbourList.Count() > newNode.numberOfNeighbours)):
                 self.DropNode(nodeToDrop)
                 self.neighbourList.Remove(nodeToDrop)
                 self.neighbourList.Add(newNode)
                 #print "__HandleNeighbourRequest, Added new friend: " + str(newNode.ip) + " in stead of: " + str(nodeToDrop.ip)
-                acceptAsNeighbour=True
-                
+                acceptAsNeighbour = True
+	
+	self.list.AddNode(newNode)
         if(acceptAsNeighbour):
             self.client.send("YES|" + str(self.currentNode.ToMessage()))
         else:
@@ -190,7 +207,6 @@ class Server(Thread):
             #print('Error in drop socket')
 
     def __HandleNeighbourDrop(self):
-        self.neighbourList = NeighbourList.NeighbourList()
         if(len(self.elements) < self.NODE_LENGTH):
             print "Error no guid recieved as a node"
             return
@@ -203,11 +219,13 @@ class Server(Thread):
         node = Node.Node()
         node.SetNodeFromMessage(message)
         self.neighbourList.Remove(node)
+	self.list.AddNode(node)
         #print "Droped neighbour: " + node.id
     
     def __HandleAwakeRespone(self):
         #Return the number of currentConnected neightbours
         count = str(self.neighbourList.Count())
+	#print "__HandleAwakeResponse, #neighbours: " + count
         self.client.send("YES," + count)
     
     def __HandleUnknownMessage(self, message):
@@ -215,34 +233,44 @@ class Server(Thread):
         #print "Unknown message from client: " + str(message)
         
     def __HandleQuery(self):
-        if(len(self.elements)<self.NODE_LENGTH):
+	#print "__HandleQuery, self.elements: " + str(self.elements)
+        if(len(self.elements) < self.NODE_LENGTH):
             print "Error no guid recieved as a node"
             return
         
-        message = ''
+        message = ""
         key = str(self.elements[1])
         Ttl = int(self.elements[2])-1
         for i in range(0,self.NODE_LENGTH):
             message = message + str(self.elements[i+3]) + "|"
         message = message[:-1]
-            
+	
+	self.elements[2] = str(Ttl)
+	forwardMessage = ""
+        for s in self.elements:
+            forwardMessage += s + "|"
+        forwardMessage = forwardMessage[:-1]
+        
         queryRequestNode = Node.Node()
         queryRequestNode.SetNodeFromMessage(message)
+	self.list.AddNode(queryRequestNode)
         
         #print query
         #print "\nRecieved query: " + key + ", from: " + self.elements[3]
-        #print "__HandleQuery, self.elements[3]: " + self.elements[3]
+        #print "__HandleQuery, Ttl: " + str(Ttl)
         
         #first vi search
-        #path = sys.path[0] + "\\Files"
         s = Settings()
         path = s.SharingFolderPath
         sharedFolder = SharedFolder(path)
+	#print "__HandleQuery, path: " + path
         if(sharedFolder.Contains(key)):
-            #print "\nFound query locally, sending query hit"
+            print "\nFound query locally, sending query hit"
             self.__SendQueryHit(key, queryRequestNode)
-        if(Ttl >= 0):
-            self.__ForwardQuery(message, queryRequestNode)
+	else:
+		print "\nCould not find query '" + key + "' here"
+        if(Ttl > 0):
+            self.__ForwardQuery(forwardMessage, queryRequestNode)
         
     def __SendQueryHit(self, key, reciever):
         #print "\nSending queryHit on '" + key + "', to '" + str(reciever.ip) + "'"
@@ -282,41 +310,39 @@ class Server(Thread):
             
     def __ForwardQuery(self, message, senderNode):
         for n in self.__FindKWalkers(senderNode):
-            if(n.id != senderNode.id):
-                self.__SendQuery(message,n)
+            self.__SendQuery(message,n)
             
     def __FindKWalkers(self, senderNode):
         kwCount = Settings().NumberOfKWalkers
         count = 0
         kWalker = []
-        for n in NeighbourList.NeighbourList().GetAll():
+        for n in self.neighbourList.GetAll():
             if (str(n.id) == str(senderNode.id)):
                 continue
             if(count <= kwCount):
+		#print "Adding node " + n.ip + " to kWalker list"
                 kWalker.append(n)
                 count = count + 1
         return kWalker
     
     def __SendQuery(self,message,reciever):
         s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        s.settimeout(10)
+        s.settimeout(5)
         #connect to node
         try:
-            #print "ForwardQuery, Connecting to: " + str(reciever.ip) + ":" + str(reciever.port)
+            #print "ForwardQuery, Connecting to: " + str(reciever.ip) + ":" + str(reciever.port) + ", message: " + message
             s.connect((reciever.ip, reciever.port))
             totalsent = 0
-            #message="Query|key|"+str(sender.ToMessage())
-            try:
-                while totalsent < len(message):
-                    sent = s.send(message[totalsent:])
-                    if sent == 0:
-                        raise RuntimeError, "socket connection broken"
-                    totalsent = totalsent + sent
-            except socket.error:
-                print('ForwardQuery, Send failed')
-            s.close()
-        except socket.error:
-            print('ForwardQuery, Cannot connect to: ' + str(reciever.ip))
+            while totalsent < len(message):
+                sent = s.send(message[totalsent:])
+                if sent == 0:
+                    raise RuntimeError, "socket connection broken"
+                totalsent = totalsent + sent
+	    #print "Forwardquery delivered"
+        except:
+            #print('ForwardQuery, Cannot connect to: ' + str(reciever.ip))
+	    pass
+        s.close()
             
     def __HandleQueryHit(self, message):
         elements = message.split('&')

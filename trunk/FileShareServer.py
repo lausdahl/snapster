@@ -4,7 +4,6 @@ import NeighbourList
 import Node
 import socket
 from threading import Thread
-from List import List
 from SharedFolder import SharedFolder
 from Settings import Settings
 import select
@@ -68,10 +67,9 @@ class FileShareServer(Thread):
                 self.s.bind(('', self.currentNode.fileSharePort))
                 self.s.listen(backlog)
         self.s.close()
-        print "Server stopped"
         
     def __HandleDownloadFile(self,fileName):
-        file = Settings().SharingFolderPath + "\\" + fileName
+        file = Settings().SharingFolderPath + "/" + fileName
         if (os.path.exists(file)):
             f = open(file, "rb")
             data = f.read()
