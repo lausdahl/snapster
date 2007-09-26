@@ -127,12 +127,12 @@ class Client(Thread):
                     raise RuntimeError, "socket connection broken"
                 totalsent = totalsent + sent
 
-            filePath = Settings().DownloadFolderPath + '\\' + di.GetFilename()
+            filePath = Settings().DownloadFolderPath + '/' + di.GetFilename()
             if (os.path.exists(filePath)):
                 os.remove(filePath)
 
             f = open(filePath,"wb")
-            #print "__DownloadFile, f: " + str(f)
+            print "__DownloadFile, f: " + str(f)
             print "\nBegin download of: " + str(di.GetFilename()) + " (" + str(di.GetSize()) + " bytes)"
             downloaded = 0
             percentage = 0

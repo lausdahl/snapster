@@ -3,23 +3,17 @@
     <app>
         <MaxNeighbourCount>3</MaxNeighbourCount>
         <rediscovery_delay_ms>5000</rediscovery_delay_ms>
-        <port>220</port>
-        <id>Claus</id>
-        <quality>8</quality>
-        <ip>172.16.0.114</ip>
+        <port>2421</port>
+        <id>Camel16</id>
+        <quality>10</quality>
+        <ip>130.225.16.135</ip>
         <startServer>1</startServer>
         <startDiscovery>1</startDiscovery>
-        <NumberOfKWalkers>3</NumberOfKWalkers>
-        <fileSharePort>897</fileSharePort>
+        <NumberOfKWalkers>2</NumberOfKWalkers>
+        <fileSharePort>5339</fileSharePort>
         <sharingFolder>Files</sharingFolder>
         <downloadFolder>Downloads</downloadFolder>
     </app>  
     <bootstrap>
-        <node>
-            <guid>Stationary</guid>
-            <ip>172.16.0.102</ip>
-            <port>240</port>
-            <quality>10</quality>
-        </node>
     </bootstrap>
 </Snapster>

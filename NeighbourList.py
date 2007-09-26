@@ -6,9 +6,10 @@ from Settings import Settings
 
 class NeighbourList(List):
     def __init__(self):
-        List.__init__(self)
+	List.__init__(self)
         self.filename = "NeighbourList.snapster"
         self.maxNeighbours = Settings().MaxNeighbourCount
+	self.GetNodes()
     
     def GetAll(self):
         return self.GetNodes()
@@ -21,7 +22,8 @@ class NeighbourList(List):
         self.RemoveNodeFromList(node)
     
     def IsFull(self):
-        return int(self.maxNeighbours) < int(self.Count())
+	#print "NeighbourList, IsFull: Sammenligner: " + str(self.maxNeighbours) + ", og " + str(self.Count())
+        return int(self.maxNeighbours) <= int(self.Count())
 
 
 #n = NeighbourList(3)

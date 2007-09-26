@@ -15,8 +15,8 @@ class Discovery(Thread):
     def __init__(self,node=None):
         Thread.__init__(self)
         self.stopRun = False
-        self.neighbourList = NeighbourList.NeighbourList()
         self.list = List.List()
+        self.neighbourList = NeighbourList.NeighbourList()
         self.nodeMe=node
         self.s=Settings()
     
@@ -36,19 +36,28 @@ class Discovery(Thread):
             self.__FindNeighbours()
             #print "Neighbour searching ended"
             #print "Neighbour isAlive ended"
+
+	    # Asking for new lists
+	    self.__AskForNewList()
+
+	    # sleep
             time.sleep(self.s.rediscovery_delay_ms/1000)
         print "Discovery ended"
-        
+
+    def __AskForNewList(self):
+	for node in self.neighbourList.GetAll():
+            if (self.stopRun):
+                return;
+	    self.__Ping(node)
+
     def __FindPeers(self):
         nodeList = Settings().GetBootStrapNodes()#self.list.GetNodes()
         #print "__FindPeers, nodeList: " + str(nodeList)
-        self.list.Clear()
         for node in nodeList:
             #print "__FindPeers, finding node: " + node.ToString()
             if (self.stopRun):
                 return
-            if (self.__Ping(node)):
-                self.list.AddNode(node)
+            self.__Ping(node)# disregarding the returnvalue, since the node will be added when it returns a list
         
     def __Ping(self, node=Node):
         returnValue = False
@@ -77,6 +86,7 @@ class Discovery(Thread):
                         break
                     data = data + chunk
                 if (len(str(data)) > 0):
+		    #print "__Ping, data: " + str(data)
                     List.List().SetListFromMessage(str(data))
                 returnValue = True
             except socket.error:
@@ -111,6 +121,7 @@ class Discovery(Thread):
                 
     def __DropNode(self, node):
         self.neighbourList.Remove(node)
+	self.list.AddNode(node)
         totalsent = 0
         message = "Drop|" + str(node.ToMessage())
         try:
@@ -156,6 +167,7 @@ class Discovery(Thread):
                     node = Node.Node()
                     node.SetNodeFromMessage(message)
                     self.neighbourList.Add(node)
+		    self.list.RemoveNodeFromList(node)
                     
             except socket.error:
                 pass
@@ -173,6 +185,7 @@ class Discovery(Thread):
             if(not val):
                 #print "Deleting neighbour: " + str(node.ip)
                 self.neighbourList.Remove(node)
+		self.list.AddNode(node)
                 
     def __CheckNeighbour(self, node):
         returnValue = False
